@@ -2,16 +2,12 @@ package GUI.Models;
 
 /**
  * Holds all the models used by the program,
- * so that controllers only have to instantiate this class.
+ * so that controllers only have to know of this class.
  */
 public class ModelsHandler {
-    private CategoryModel categoryModel;
+    private static CategoryModel categoryModel = new CategoryModel();
 
-    public ModelsHandler() {
-        categoryModel = new CategoryModel();
-    }
-
-    public CategoryModel getCategoryModel() {
+    public static CategoryModel getCategoryModel() {
         return categoryModel;
     }
 }

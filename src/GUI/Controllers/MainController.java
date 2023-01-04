@@ -1,12 +1,21 @@
 package GUI.Controllers;
 
 import GUI.Models.ModelsHandler;
+import GUI.Util.ExceptionHandler;
+import GUI.Util.ModalOpener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainController {
     @FXML
@@ -30,10 +39,10 @@ public class MainController {
     @FXML
     private Button btnsearch;
 
-    private ModelsHandler modelsHandler;
+    private ExceptionHandler exceptionHandler;
 
-    public MainViewController() {
-        modelsHandler = new ModelsHandler();
+    public MainController() {
+        exceptionHandler = new ExceptionHandler();
     }
 
     @FXML
@@ -41,6 +50,7 @@ public class MainController {
     }
     @FXML
     private void handleOpenCategories(ActionEvent actionEvent) {
+        ModalOpener.openModal(getClass().getResource("/GUI/Views/CategoriesView.fxml"), "Categories", "Failed to open categories");
     }
     @FXML
     private void handleRemoveMovie(ActionEvent actionEvent) {
