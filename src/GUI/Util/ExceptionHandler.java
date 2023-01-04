@@ -1,8 +1,8 @@
-package BE;
+package GUI.Util;
 
 import javafx.scene.control.Alert;
 
-public class ExceptionHandeler {
+public class ExceptionHandler {
     /**
      * Handles thrown exceptions by displaying the error in an Alert window.
      * @param t - Exception thrown
