@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane prefHeight="500.0" prefWidth="777.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.MainViewController">
+   <children>
+      <HBox layoutY="94.0" prefHeight="373.0" prefWidth="777.0">
+         <children>
+            <TableView fx:id="tbvMovies" prefHeight="376.0" prefWidth="782.0">
+              <columns>
+                <TableColumn fx:id="tbvTitle" prefWidth="406.0" text="Title" />
+                  <TableColumn fx:id="tbvCategory" prefWidth="213.0" text="Category" />
+                  <TableColumn fx:id="tbvIMDB" prefWidth="82.0" text="IMDB" />
+                  <TableColumn fx:id="tbvPRating" prefWidth="75.0" text="P Rating" />
+              </columns>
+            </TableView>
+         </children>
+      </HBox>
+      <HBox layoutY="467.0" prefHeight="79.0" prefWidth="274.0">
+         <children>
+            <Button fx:id="btnCategories" mnemonicParsing="false" onAction="#handleOpenCategories" text="Categories">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <HBox layoutX="339.0" layoutY="466.0" prefHeight="91.0" prefWidth="431.0">
+         <children>
+            <Button fx:id="btnAddMovie" mnemonicParsing="false" onAction="#handleAddMovie" text="Add" />
+            <Button fx:id="btnRemoveMovie" mnemonicParsing="false" onAction="#handleRemoveMovie" text="Remove" />
+         </children>
+      </HBox>
+      <HBox layoutX="570.0" layoutY="66.0" prefHeight="25.0" prefWidth="200.0">
+         <children>
+            <TextField fx:id="txtfSearch" />
+            <Button fx:id="btnsearch" mnemonicParsing="false" onAction="#handleSearch" text="Search" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
