@@ -1,17 +1,19 @@
 package BE;
 
+import java.util.List;
+
 public class Movie {
 private int id;
 private double rating;
 private double pRating;
-private String category;
+private List<Category> categories;
 private String filePath;
 private String title;
 
-    public Movie(int id, double rating, String category, String filePath, String title) {
+    public Movie(int id, double rating, List<Category> categories, String filePath, String title) {
         this.id = id;
         this.rating = rating;
-        this.category = category;
+        this.categories = categories;
         this.filePath = filePath;
         this.title = title;
     }
@@ -44,12 +46,12 @@ private String title;
         this.pRating = pRating;
     }
 
-    public String getCategory() {
-        return category;
+    public List<Category> getCategories() {
+        return categories;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void addCategory(Category category) {
+        this.categories.add(category);
     }
 
     public String getFilePath() {
