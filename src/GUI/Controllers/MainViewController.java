@@ -1,5 +1,6 @@
 package GUI.Controllers;
 
+import GUI.Models.ModelsHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -28,6 +29,12 @@ public class MainViewController {
     private TextField txtfSearch;
     @FXML
     private Button btnsearch;
+
+    private ModelsHandler modelsHandler;
+
+    public MainViewController() {
+        modelsHandler = new ModelsHandler();
+    }
 
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
