@@ -12,7 +12,7 @@
    <children>
       <HBox layoutY="94.0" prefHeight="373.0" prefWidth="777.0">
          <children>
-            <TableView fx:id="tbvMovies" prefHeight="376.0" prefWidth="782.0">
+            <TableView fx:id="tbvMovies" prefHeight="376.0" prefWidth="782.0" onMouseClicked="#playMovie">
               <columns>
                 <TableColumn fx:id="clmTitle" prefWidth="406.0" text="Title" />
                   <TableColumn fx:id="clmCategory" prefWidth="213.0" text="Category" />
