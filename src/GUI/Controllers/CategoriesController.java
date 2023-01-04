@@ -1,25 +1,35 @@
 package GUI.Controllers;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 public class CategoriesController {
-    public TableView tbvCat;
-    public TableColumn clmCat;
-    public Button btnAddCat;
-    public Button btnRemoveCat;
-    public Button btnCancel;
-    public TextField txtfieldNewCat;
+    @FXML
+    private TableView tbvCat;
+    @FXML
+    private TableColumn clmCat;
+    @FXML
+    private Button btnAddCat;
+    @FXML
+    private Button btnRemoveCat;
+    @FXML
+    private Button btnCancel;
+    @FXML
+    private TextField txtfieldNewCat;
 
-    public void handleAddCat(ActionEvent actionEvent) {
+    @FXML
+    private void handleAddCat(ActionEvent actionEvent) {
     }
 
-    public void handleRemoveCat(ActionEvent actionEvent) {
+    @FXML
+    private void handleRemoveCat(ActionEvent actionEvent) {
     }
 
-    public void handleCancel(ActionEvent actionEvent) {
+    @FXML
+    private void handleCancel(ActionEvent actionEvent) {
     }
 }
