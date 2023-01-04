@@ -6,16 +6,26 @@ private double rating;
 private double pRating;
 private String category;
 private String filePath;
+private String title;
 
-    public Movie(int id, double rating, String category, String filePath) {
+    public Movie(int id, double rating, String category, String filePath, String title) {
         this.id = id;
         this.rating = rating;
         this.category = category;
         this.filePath = filePath;
+        this.title = title;
     }
 
     public int getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public double getRating() {
