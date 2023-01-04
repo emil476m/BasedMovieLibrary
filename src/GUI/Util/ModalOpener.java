@@ -1,5 +1,7 @@
 package GUI.Util;
 
+import GUI.Controllers.BaseController;
+import GUI.Models.ModelsHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,12 +12,15 @@ import java.io.IOException;
 import java.net.URL;
 
 public class ModalOpener {
-    public static void openModal(URL resource, String title, String errorMessage) {
+    public static void openModal(URL resource, String title, ModelsHandler modelsHandler, String errorMessage) {
         FXMLLoader loader = new FXMLLoader(resource);
-        Parent root = null;
 
         try {
-            root = loader.load();
+            Parent root = loader.load();
+
+            BaseController controller = loader.getController();
+            controller.setModel(modelsHandler);
+            controller.setup();
 
             Stage stage = new Stage();
 

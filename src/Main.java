@@ -1,4 +1,5 @@
 import BE.Category;
+import GUI.Controllers.BaseController;
 import GUI.Models.ModelsHandler;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +14,14 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/GUI/Views/MainView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/MainView.fxml"));
+
+        Parent root = loader.load();
+
+        BaseController controller = loader.getController();
+        controller.setModel(new ModelsHandler());
+        controller.setup();
+
         primaryStage.setTitle("Based Movie Collection");
         //primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root));

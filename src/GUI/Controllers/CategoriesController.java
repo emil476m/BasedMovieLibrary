@@ -15,7 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CategoriesController implements Initializable {
+public class CategoriesController extends BaseController {
     @FXML
     private TableView<Category> tbvCat;
     @FXML
@@ -36,8 +36,8 @@ public class CategoriesController implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        tbvCat.setItems(ModelsHandler.getCategoryModel().getCategories());
+    public void setup() {
+        tbvCat.setItems(getModelsHandler().getCategoryModel().getCategories());
 
         clmCat.setCellValueFactory(new PropertyValueFactory<>("name"));
     }
@@ -48,7 +48,7 @@ public class CategoriesController implements Initializable {
             Category category = new Category(txtfieldNewCat.getText());
 
             try {
-                ModelsHandler.getCategoryModel().addCategory(category);
+                getModelsHandler().getCategoryModel().addCategory(category);
             }
             catch (Exception e) {
                 exceptionHandler.displayError(e);

@@ -5,9 +5,17 @@ package GUI.Models;
  * so that controllers only have to know of this class.
  */
 public class ModelsHandler {
-    private static CategoryModel categoryModel = new CategoryModel();
+    private CategoryModel categoryModel;
+    private MovieModel movieModel;
 
-    public static CategoryModel getCategoryModel() {
+    public ModelsHandler() {
+        categoryModel = new CategoryModel();
+        movieModel = new MovieModel();
+    }
+
+    public CategoryModel getCategoryModel() {
         return categoryModel;
     }
+
+    public MovieModel getMovieModel() { return movieModel; }
 }
