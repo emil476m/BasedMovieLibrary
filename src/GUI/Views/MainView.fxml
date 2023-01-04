@@ -8,16 +8,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="777.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.MainViewController">
+<AnchorPane prefHeight="500.0" prefWidth="777.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.MainController">
    <children>
       <HBox layoutY="94.0" prefHeight="373.0" prefWidth="777.0">
          <children>
             <TableView fx:id="tbvMovies" prefHeight="376.0" prefWidth="782.0">
               <columns>
-                <TableColumn fx:id="tbvTitle" prefWidth="406.0" text="Title" />
-                  <TableColumn fx:id="tbvCategory" prefWidth="213.0" text="Category" />
-                  <TableColumn fx:id="tbvIMDB" prefWidth="82.0" text="IMDB" />
-                  <TableColumn fx:id="tbvPRating" prefWidth="75.0" text="P Rating" />
+                <TableColumn fx:id="clmTitle" prefWidth="406.0" text="Title" />
+                  <TableColumn fx:id="clmCategory" prefWidth="213.0" text="Category" />
+                  <TableColumn fx:id="clmIMDB" prefWidth="82.0" text="IMDB" />
+                  <TableColumn fx:id="clmPRating" prefWidth="75.0" text="P Rating" />
               </columns>
             </TableView>
          </children>
@@ -42,7 +42,7 @@
       </HBox>
       <HBox layoutX="570.0" layoutY="66.0" prefHeight="25.0" prefWidth="200.0">
          <children>
-            <TextField fx:id="txtfSearch" />
+            <TextField fx:id="txtfieldSearch" />
             <Button fx:id="btnsearch" mnemonicParsing="false" onAction="#handleSearch" text="Search" />
          </children>
       </HBox>
