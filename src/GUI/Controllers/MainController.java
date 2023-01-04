@@ -8,17 +8,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-public class MainViewController {
+public class MainController {
     @FXML
     private TableView tbvMovies;
     @FXML
-    private TableColumn tbvTitle;
+    private TableColumn clmTitle;
     @FXML
-    private TableColumn tbvCategory;
+    private TableColumn clmCategory;
     @FXML
-    private TableColumn tbvIMDB;
+    private TableColumn clmIMDB;
     @FXML
-    private TableColumn tbvPRating;
+    private TableColumn clmPRating;
     @FXML
     private Button btnCategories;
     @FXML
@@ -26,7 +26,7 @@ public class MainViewController {
     @FXML
     private Button btnRemoveMovie;
     @FXML
-    private TextField txtfSearch;
+    private TextField txtfieldSearch;
     @FXML
     private Button btnsearch;
 
