@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-public class CreateMovieController {
+public class CreateMovieController extends BaseController {
     @FXML
     private Button btnCancel;
     @FXML
@@ -41,5 +41,10 @@ public class CreateMovieController {
 
     @FXML
     private void handleRemoveCat(ActionEvent actionEvent) {
+    }
+
+    @Override
+    public void setup() {
+
     }
 }

@@ -7,7 +7,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
-public class CategoriesController {
+public class CategoriesController extends BaseController {
     @FXML
     private TableView tbvCat;
     @FXML
@@ -31,5 +31,10 @@ public class CategoriesController {
 
     @FXML
     private void handleCancel(ActionEvent actionEvent) {
+    }
+
+    @Override
+    public void setup() {
+
     }
 }
