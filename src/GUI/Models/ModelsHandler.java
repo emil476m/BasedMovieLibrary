@@ -8,7 +8,7 @@ public class ModelsHandler {
     private CategoryModel categoryModel;
     private MovieModel movieModel;
 
-    public ModelsHandler() {
+    public ModelsHandler() throws Exception {
         categoryModel = new CategoryModel();
         movieModel = new MovieModel();
     }

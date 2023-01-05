@@ -14,7 +14,7 @@ public class ExceptionHandler {
 
         //Set title and load error from parameter.
         alert.setTitle("Something went wrong");
-        alert.setHeaderText(t.getMessage());
+        alert.setHeaderText(t.getLocalizedMessage());
 
         //Display and wait on user action.
         alert.showAndWait();

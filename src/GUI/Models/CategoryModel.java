@@ -6,13 +6,16 @@ import BLL.Interfaces.ICategoryManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.List;
+
 public class CategoryModel {
     private ICategoryManager categoryManager;
     private ObservableList<Category> categories;
 
-    public CategoryModel() {
+    public CategoryModel() throws Exception {
         categoryManager = new CategoryManager();
         categories = FXCollections.observableArrayList();
+        getAllCategories();
     }
 
     public ObservableList<Category> getCategories() {
@@ -29,5 +32,15 @@ public class CategoryModel {
         Category newCategory = categoryManager.addCategory(category);
 
         if (newCategory != null) categories.add(newCategory);
+    }
+
+    /**
+     * Retrieves all categories and adds them to the list.
+     * @throws Exception If it fails to retrieve the categories.
+     */
+    private void getAllCategories() throws Exception {
+        List<Category> allCategories = categoryManager.getAllCategories();
+
+        categories.addAll(allCategories);
     }
 }
