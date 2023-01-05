@@ -45,10 +45,8 @@ public class MainController extends BaseController {
     @FXML
     private Button btnsearch;
 
-    private ExceptionHandler exceptionHandler;
-
     public MainController() {
-        exceptionHandler = new ExceptionHandler();
+
     }
 
     @FXML

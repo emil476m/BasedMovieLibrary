@@ -5,6 +5,8 @@ import BLL.Interfaces.ICategoryManager;
 import DAL.DB.CategoryDAO_DB;
 import DAL.Interfaces.ICategoryDAO;
 
+import java.util.List;
+
 public class CategoryManager implements ICategoryManager {
     ICategoryDAO categoryDAO = new CategoryDAO_DB();
 
@@ -18,5 +20,15 @@ public class CategoryManager implements ICategoryManager {
     @Override
     public Category addCategory(Category category) throws Exception {
         return categoryDAO.addCategory(category);
+    }
+
+    /**
+     * Instructs the DAO to retrieve all categories.
+     * @return A list of all categories.
+     * @throws Exception If it fails to retrieve the categories.
+     */
+    @Override
+    public List<Category> getAllCategories() throws Exception {
+        return categoryDAO.getAllCategories();
     }
 }

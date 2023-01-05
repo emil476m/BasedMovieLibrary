@@ -29,10 +29,8 @@ public class CategoriesController extends BaseController {
     @FXML
     private TextField txtfieldNewCat;
 
-    private ExceptionHandler exceptionHandler;
-
     public CategoriesController() {
-        exceptionHandler = new ExceptionHandler();
+
     }
 
     @Override
@@ -51,7 +49,7 @@ public class CategoriesController extends BaseController {
                 getModelsHandler().getCategoryModel().addCategory(category);
             }
             catch (Exception e) {
-                exceptionHandler.displayError(e);
+                ExceptionHandler.displayError(e);
             }
         }
     }
