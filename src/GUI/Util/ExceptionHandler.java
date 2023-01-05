@@ -20,21 +20,4 @@ public class ExceptionHandler {
         alert.setHeaderText(throwable.getLocalizedMessage());
         alert.showAndWait();
     }
-
-    /**
-     * Exception where you can write your own message to the user
-     * @param s the string which we wish the user to see
-     */
-    public void displayNiceError(String s){
-        //Create new alert.
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-
-        //Set title and load error from parameter.
-        alert.setTitle("Something went wrong");
-        alert.setHeaderText(s);
-
-        //Display and wait on user action.
-        alert.showAndWait();
-
-    }
 }

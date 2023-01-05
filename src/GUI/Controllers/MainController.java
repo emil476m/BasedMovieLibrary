@@ -1,12 +1,14 @@
 package GUI.Controllers;
 
 import GUI.Util.ExceptionHandler;
+import GUI.Models.ModelsHandler;
+import GUI.Util.ModalOpener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -16,10 +18,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController extends BaseController implements Initializable {
+public class MainController extends BaseController {
     @FXML
     private TableView tbvMovies;
     @FXML
@@ -40,6 +44,12 @@ public class MainController extends BaseController implements Initializable {
     private TextField txtfieldSearch;
     @FXML
     private Button btnsearch;
+
+    private ExceptionHandler exceptionHandler;
+
+    public MainController() {
+        exceptionHandler = new ExceptionHandler();
+    }
 
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
@@ -65,6 +75,10 @@ public class MainController extends BaseController implements Initializable {
     }
     @FXML
     private void handleOpenCategories(ActionEvent actionEvent) {
+        ModalOpener.openModal(getClass().getResource("/GUI/Views/CategoriesView.fxml"),
+                "Categories",
+                getModelsHandler(),
+                "Failed to open categories");
     }
     @FXML
     private void handleRemoveMovie(ActionEvent actionEvent) {
@@ -75,11 +89,6 @@ public class MainController extends BaseController implements Initializable {
 
     @Override
     public void setup() {
-
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
 
     }
 }

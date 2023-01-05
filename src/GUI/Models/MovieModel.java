@@ -1,4 +1,4 @@
-package GUI.Model;
+package GUI.Models;
 
 public class MovieModel {
 }

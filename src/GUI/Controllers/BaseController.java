@@ -1,30 +1,15 @@
 package GUI.Controllers;
 
-import GUI.Model.MovieModel;
+import GUI.Models.ModelsHandler;
 
 public abstract class BaseController {
-    private MovieModel model;
+    private ModelsHandler modelsHandler;
 
-    /**
-     * Sets the model of the controller
-     * @param model
-     */
-    public void setModel(MovieModel model)
-    {
-        this.model = model;
+    public void setModel(ModelsHandler modelsHandler) {
+        this.modelsHandler = modelsHandler;
     }
 
-    /**
-     * Gets the model of the controller
-     * @return the model of the controller
-     */
-    public MovieModel getModel()
-    {
-        return model;
-    }
+    public ModelsHandler getModelsHandler() { return modelsHandler; }
 
-    /**
-     * What happens when the controller starts
-     */
     public abstract void setup();
 }
