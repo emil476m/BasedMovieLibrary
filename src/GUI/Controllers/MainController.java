@@ -1,5 +1,7 @@
 package GUI.Controllers;
 
+import BE.Category;
+import BE.Movie;
 import GUI.Util.ExceptionHandler;
 import GUI.Models.ModelsHandler;
 import GUI.Util.ModalOpener;
@@ -13,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -21,19 +24,20 @@ import java.io.IOException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController extends BaseController {
     @FXML
-    private TableView tbvMovies;
+    private TableView<Movie> tbvMovies;
     @FXML
-    private TableColumn clmTitle;
+    private TableColumn<Movie, String> clmTitle;
     @FXML
-    private TableColumn clmCategory;
+    private TableColumn<Movie, List<Category>> clmCategory;
     @FXML
-    private TableColumn clmIMDB;
+    private TableColumn<Movie, Double> clmIMDB;
     @FXML
-    private TableColumn clmPRating;
+    private TableColumn<Movie, Double> clmPRating;
     @FXML
     private Button btnCategories;
     @FXML
@@ -48,6 +52,8 @@ public class MainController extends BaseController {
     public MainController() {
 
     }
+
+
 
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
@@ -68,7 +74,7 @@ public class MainController extends BaseController {
         stage.show();
 
         CreateMovieController controller = loader.getController();
-        controller.setModel(super.getModel());
+        controller.setModel(getModelsHandler());
         controller.setup();
     }
     @FXML
@@ -87,6 +93,14 @@ public class MainController extends BaseController {
 
     @Override
     public void setup() {
+        initializeMovies();
+    }
 
+    private void initializeMovies(){
+        tbvMovies.setItems(getModelsHandler().getMovieModel().getMovieObservableList());
+        clmTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        clmCategory.setCellValueFactory(new PropertyValueFactory<>("Categories"));
+        clmIMDB.setCellValueFactory(new PropertyValueFactory<>("Rating"));
+        clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
 }

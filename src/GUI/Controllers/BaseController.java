@@ -9,7 +9,9 @@ public abstract class BaseController {
         this.modelsHandler = modelsHandler;
     }
 
-    public ModelsHandler getModelsHandler() { return modelsHandler; }
+    public ModelsHandler getModelsHandler() {
+        return modelsHandler;
+    }
 
     public abstract void setup();
 }

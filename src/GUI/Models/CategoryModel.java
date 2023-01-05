@@ -43,4 +43,13 @@ public class CategoryModel {
 
         categories.addAll(allCategories);
     }
+
+    public Category getCategoryFromID(int id){
+        for (Category category: categories){
+            if (id == category.getId()){
+                return category;
+            }
+        }
+        return null;
+    }
 }
