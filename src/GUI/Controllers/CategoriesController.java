@@ -29,10 +29,8 @@ public class CategoriesController extends BaseController {
     @FXML
     private TextField txtfieldNewCat;
 
-    private ExceptionHandler exceptionHandler;
-
     public CategoriesController() {
-        exceptionHandler = new ExceptionHandler();
+
     }
 
     @Override
@@ -51,13 +49,27 @@ public class CategoriesController extends BaseController {
                 getModelsHandler().getCategoryModel().addCategory(category);
             }
             catch (Exception e) {
-                exceptionHandler.displayError(e);
+                ExceptionHandler.displayError(e);
             }
         }
     }
 
+    /**
+     * Tries to remove the selected category.
+     * @param actionEvent
+     */
     @FXML
     private void handleRemoveCat(ActionEvent actionEvent) {
+        Category catToDelete = tbvCat.getSelectionModel().getSelectedItem();
+
+        if (catToDelete != null) {
+            try {
+                getModelsHandler().getCategoryModel().deleteCategory(catToDelete);
+            }
+            catch (Exception e) {
+                ExceptionHandler.displayError(e);
+            }
+        }
     }
 
     @FXML

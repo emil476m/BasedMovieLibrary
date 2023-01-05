@@ -1,4 +1,8 @@
 import BE.Category;
+import BLL.CategoryManager;
+import BLL.Interfaces.ICategoryManager;
+import DAL.DB.CategoryDAO_DB;
+import DAL.Interfaces.ICategoryDAO;
 import GUI.Controllers.BaseController;
 import GUI.Models.ModelsHandler;
 import javafx.application.Application;
@@ -13,7 +17,7 @@ public class Main extends Application {
         launch(args);
     }
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/MainView.fxml"));
 
         Parent root = loader.load();

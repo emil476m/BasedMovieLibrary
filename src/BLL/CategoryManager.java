@@ -19,4 +19,14 @@ public class CategoryManager implements ICategoryManager {
     public Category addCategory(Category category) throws Exception {
         return categoryDAO.addCategory(category);
     }
+
+    /**
+     * Instructs the DAO to delete a category.
+     * @param category The category to delete.
+     * @throws Exception If it fails to delete the category.
+     */
+    @Override
+    public void deleteCategory(Category category) throws Exception {
+        categoryDAO.deleteCategory(category);
+    }
 }

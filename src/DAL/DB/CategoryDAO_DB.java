@@ -43,4 +43,25 @@ public class CategoryDAO_DB implements ICategoryDAO {
             throw new Exception("Failed to create category", e);
         }
     }
+
+    /**
+     * Deletes a category from the database.
+     * @param category The category to delete.
+     * @throws Exception If it fails to delete the category.
+     */
+    @Override
+    public void deleteCategory(Category category) throws Exception {
+        String sql = "DELETE FROM Category WHERE Id = ?";
+
+        try (Connection connection = dbConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, category.getId());
+
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Failed to remove category", e);
+        }
+    }
 }

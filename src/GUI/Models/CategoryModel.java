@@ -30,4 +30,16 @@ public class CategoryModel {
 
         if (newCategory != null) categories.add(newCategory);
     }
+
+    /**
+     * Passes a category to the category manager for deletion,
+     * and removes the same category from the list.
+     * @param category The category to remove.
+     * @throws Exception If it fails to delete the category.
+     */
+    public void deleteCategory(Category category) throws Exception {
+        categoryManager.deleteCategory(category);
+
+        categories.remove(category);
+    }
 }
