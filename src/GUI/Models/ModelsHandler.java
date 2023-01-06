@@ -28,12 +28,7 @@ public class ModelsHandler {
                 movieModel.getMovieObservableList().get(index).addCategory(cat);
             }
         }
-        for (Movie m : movieModel.getMovieObservableList()){
-            System.out.println(m.getCategories());
-        }
     }
-
-
 
     public CategoryModel getCategoryModel() {
         return categoryModel;

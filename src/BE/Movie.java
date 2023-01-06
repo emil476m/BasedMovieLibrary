@@ -59,12 +59,10 @@ private String title;
     }
     public String getCategoryNames(){
         String allCatNames = "";
-        System.out.println("test");
-        System.out.println(categories.get(0).getName());
-        for (Category c : categories){
-
-           allCatNames += c.getName() +", ";
+        for (int i = 0; i< categories.size()-1; i++){
+            allCatNames += categories.get(i).getName() + ", ";
         }
+        allCatNames += categories.get(categories.size()-1);
         return allCatNames;
     }
 

@@ -33,7 +33,7 @@ public class MainController extends BaseController {
     @FXML
     private TableColumn<Movie, String> clmTitle;
     @FXML
-    private TableColumn<Movie, List<Category>> clmCategory;
+    private TableColumn<Movie, String> clmCategory;
     @FXML
     private TableColumn<Movie, Double> clmIMDB;
     @FXML
@@ -99,7 +99,7 @@ public class MainController extends BaseController {
     private void initializeMovies(){
         tbvMovies.setItems(getModelsHandler().getMovieModel().getMovieObservableList());
         clmTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
-        clmCategory.setCellValueFactory(new PropertyValueFactory<>("Categories"));
+        clmCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryNames"));
         clmIMDB.setCellValueFactory(new PropertyValueFactory<>("Rating"));
         clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
