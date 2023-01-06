@@ -8,4 +8,6 @@ public interface ICategoryManager {
     Category addCategory(Category category) throws Exception;
 
     List<Category> getAllCategories() throws Exception;
+
+    void deleteCategory(Category category) throws Exception;
 }

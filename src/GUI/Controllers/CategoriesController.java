@@ -54,8 +54,22 @@ public class CategoriesController extends BaseController {
         }
     }
 
+    /**
+     * Tries to remove the selected category.
+     * @param actionEvent
+     */
     @FXML
     private void handleRemoveCat(ActionEvent actionEvent) {
+        Category catToDelete = tbvCat.getSelectionModel().getSelectedItem();
+
+        if (catToDelete != null) {
+            try {
+                getModelsHandler().getCategoryModel().deleteCategory(catToDelete);
+            }
+            catch (Exception e) {
+                ExceptionHandler.displayError(e);
+            }
+        }
     }
 
     @FXML
