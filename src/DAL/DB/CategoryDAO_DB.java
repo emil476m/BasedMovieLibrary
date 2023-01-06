@@ -10,10 +10,6 @@ import java.util.List;
 public class CategoryDAO_DB implements ICategoryDAO {
     private DatabaseConnector dbConnector;
 
-    // Column indexes in the Category table.
-    private int idIndex = 1;
-    private int categoryNameIndex = 2;
-
     public CategoryDAO_DB() {
         dbConnector = new DatabaseConnector();
     }
@@ -39,9 +35,8 @@ public class CategoryDAO_DB implements ICategoryDAO {
             ResultSet resultSet = statement.getGeneratedKeys();
 
             if (resultSet.next()) {
-                newCategory = new Category(resultSet.getInt(idIndex), category.getName());
+                newCategory = new Category(resultSet.getInt(1), category.getName());
             }
-
             return newCategory;
         }
         catch (SQLException e) {
@@ -65,8 +60,9 @@ public class CategoryDAO_DB implements ICategoryDAO {
             List<Category> categories = new ArrayList<>();
 
             while (resultSet.next()) {
-                int id = resultSet.getInt(idIndex);
-                String categoryName = resultSet.getString(categoryNameIndex);
+                int id = resultSet.getInt("Id");
+                String categoryName = resultSet.getString("CategoryName");
+
 
                 categories.add(new Category(id, categoryName));
             }
