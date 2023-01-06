@@ -2,8 +2,16 @@ package GUI.Controllers;
 
 import BE.Movie;
 import GUI.Util.ExceptionHandler;
+import BE.Category;
+import BE.Movie;
+import GUI.Util.ExceptionHandler;
+import GUI.Models.ModelsHandler;
+import GUI.Util.ModalOpener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -14,20 +22,29 @@ import javafx.scene.input.MouseEvent;
 
 import java.awt.*;
 import java.io.File;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import java.io.IOException;
+
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
-public class MainController extends BaseController implements Initializable {
+public class MainController extends BaseController {
     @FXML
-    private TableView tbvMovies;
+    private TableView<Movie> tbvMovies;
     @FXML
-    private TableColumn clmTitle;
+    private TableColumn<Movie, String> clmTitle;
     @FXML
-    private TableColumn clmCategory;
+    private TableColumn<Movie, String> clmCategory;
     @FXML
-    private TableColumn clmIMDB;
+    private TableColumn<Movie, Double> clmIMDB;
     @FXML
-    private TableColumn clmPRating;
+    private TableColumn<Movie, Double> clmPRating;
     @FXML
     private Button btnCategories;
     @FXML
@@ -38,15 +55,41 @@ public class MainController extends BaseController implements Initializable {
     private TextField txtfieldSearch;
     @FXML
     private Button btnsearch;
-
     private ExceptionHandler exceptionHandler;
     private Movie selectedMovie;
     private File directory;
+    public MainController() {
+
+    }
+
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
+        //Load the new stage & view
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/CreateMovieView.fxml"));
+        Parent root = null;
+
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            ExceptionHandler.displayError(new Exception("Failed to open movie creator", e));
+        }
+
+        Stage stage = new Stage();
+        stage.setTitle("Add new movie");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+
+        CreateMovieController controller = loader.getController();
+        controller.setModel(getModelsHandler());
+        controller.setup();
     }
     @FXML
     private void handleOpenCategories(ActionEvent actionEvent) {
+        ModalOpener.openModal(getClass().getResource("/GUI/Views/CategoriesView.fxml"),
+                "Categories",
+                getModelsHandler(),
+                "Failed to open categories");
     }
     @FXML
     private void handleRemoveMovie(ActionEvent actionEvent) {
@@ -66,7 +109,7 @@ public class MainController extends BaseController implements Initializable {
 
     private void openMediaPlayer()
     {
-       selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem()
+       selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
         directory = new File(selectedMovie.getFilePath());
         Desktop desktop = Desktop.getDesktop();
         if(desktop.isSupported(Desktop.Action.OPEN))
@@ -83,11 +126,14 @@ public class MainController extends BaseController implements Initializable {
 
     @Override
     public void setup() {
-
+        initializeMovies();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
+    private void initializeMovies(){
+        tbvMovies.setItems(getModelsHandler().getMovieModel().getMovieObservableList());
+        clmTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        clmCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryNames"));
+        clmIMDB.setCellValueFactory(new PropertyValueFactory<>("Rating"));
+        clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
 }

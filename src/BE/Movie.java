@@ -1,5 +1,6 @@
 package BE;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Movie {
@@ -16,6 +17,13 @@ private String title;
         this.categories = categories;
         this.filePath = filePath;
         this.title = title;
+    }
+    public Movie(int id, double rating, String filePath, String title) {
+        this.id = id;
+        this.rating = rating;
+        this.filePath = filePath;
+        this.title = title;
+        categories = new ArrayList<>();
     }
 
     public int getId() {
@@ -38,16 +46,24 @@ private String title;
         this.rating = rating;
     }
 
-    public double getpRating() {
+    public double getPRating() {
         return pRating;
     }
 
-    public void setpRating(double pRating) {
+    public void setPRating(double pRating) {
         this.pRating = pRating;
     }
 
     public List<Category> getCategories() {
         return categories;
+    }
+    public String getCategoryNames(){
+        String allCatNames = "";
+        for (int i = 0; i< categories.size()-1; i++){
+            allCatNames += categories.get(i).getName() + ", ";
+        }
+        allCatNames += categories.get(categories.size()-1);
+        return allCatNames;
     }
 
     public void addCategory(Category category) {
