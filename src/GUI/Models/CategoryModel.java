@@ -1,7 +1,9 @@
 package GUI.Models;
 
 import BE.Category;
+import BLL.CatMovieManager;
 import BLL.CategoryManager;
+import BLL.Interfaces.ICatMovieManager;
 import BLL.Interfaces.ICategoryManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,10 +12,12 @@ import java.util.List;
 
 public class CategoryModel {
     private ICategoryManager categoryManager;
+    private ICatMovieManager catMovieManager;
     private ObservableList<Category> categories;
 
     public CategoryModel() throws Exception {
         categoryManager = new CategoryManager();
+        catMovieManager = new CatMovieManager();
         categories = FXCollections.observableArrayList();
         getAllCategories();
     }
@@ -61,6 +65,8 @@ public class CategoryModel {
      */
     public void deleteCategory(Category category) throws Exception {
         categoryManager.deleteCategory(category);
+        // Deletes the relations of the category
+        catMovieManager.deleteWhereCat(category);
 
         categories.remove(category);
     }

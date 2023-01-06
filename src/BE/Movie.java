@@ -58,17 +58,22 @@ private String title;
         return categories;
     }
     public String getCategoryNames(){
-        String allCatNames = "";
-        for (int i = 0; i< categories.size()-1; i++){
-            allCatNames += categories.get(i).getName() + ", ";
+        if (!categories.isEmpty()) {
+            String allCatNames = "";
+            for (int i = 0; i< categories.size()-1; i++){
+                allCatNames += categories.get(i).getName() + ", ";
+            }
+            allCatNames += categories.get(categories.size()-1);
+            return allCatNames;
         }
-        allCatNames += categories.get(categories.size()-1);
-        return allCatNames;
+        return null;
     }
 
     public void addCategory(Category category) {
         this.categories.add(category);
     }
+
+    public void removeCategory(Category category) { this.categories.remove(category); }
 
     public String getFilePath() {
         return filePath;

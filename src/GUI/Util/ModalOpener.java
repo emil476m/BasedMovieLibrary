@@ -28,7 +28,7 @@ public class ModalOpener {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
 
-            stage.show();
+            stage.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
             ExceptionHandler.displayError(new Exception(errorMessage, e));

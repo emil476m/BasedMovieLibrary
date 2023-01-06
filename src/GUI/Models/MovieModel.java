@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 public class MovieModel {
 
@@ -29,6 +30,25 @@ public class MovieModel {
         getAllCatMovies();
     }
 
+    /**
+     * Removes a category from all movies in the list.
+     * @param category The category to remove.
+     */
+    public void updateMovieCats(Category category) {
+        movieObservableList.replaceAll(movie -> {
+            List<Category> catsToRemove = new ArrayList<>();
+
+            for (Category cat : movie.getCategories()) {
+                if (cat.getId() == category.getId()) catsToRemove.add(cat);
+            }
+
+            for (Category cat : catsToRemove) {
+                movie.removeCategory(cat);
+            }
+
+            return movie;
+        });
+    }
 
     private void getAllCatMovies() throws Exception {
         catMovieList.addAll(catMovieManager.getAllCatMovies());

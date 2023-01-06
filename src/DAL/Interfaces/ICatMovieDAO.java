@@ -1,6 +1,8 @@
 package DAL.Interfaces;
 
 import BE.CatMovie;
+import BE.Category;
+import BE.Movie;
 
 import java.util.List;
 
@@ -12,4 +14,6 @@ public interface ICatMovieDAO {
      * @throws Exception throws exception if it fails to return a list of CatMovie objects.
      */
     List<CatMovie> getAllCatMovies() throws Exception;
+
+    void deleteWhereCat(Category category) throws Exception;
 }

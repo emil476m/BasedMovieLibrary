@@ -65,6 +65,7 @@ public class CategoriesController extends BaseController {
         if (catToDelete != null) {
             try {
                 getModelsHandler().getCategoryModel().deleteCategory(catToDelete);
+                getModelsHandler().getMovieModel().updateMovieCats(catToDelete);
             }
             catch (Exception e) {
                 ExceptionHandler.displayError(e);
