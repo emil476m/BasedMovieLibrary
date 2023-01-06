@@ -2,6 +2,7 @@ package GUI.Controllers;
 
 import BE.Category;
 import BE.Movie;
+import GUI.Models.MovieModel;
 import GUI.Util.ExceptionHandler;
 import GUI.Models.ModelsHandler;
 import GUI.Util.ModalOpener;
@@ -16,6 +17,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -48,6 +51,8 @@ public class MainController extends BaseController {
     private TextField txtfieldSearch;
     @FXML
     private Button btnsearch;
+    
+    private MovieModel movieModel;
 
     public MainController() {
 
@@ -89,6 +94,28 @@ public class MainController extends BaseController {
     }
     @FXML
     private void handleSearch(ActionEvent actionEvent) {
+        String query = txtfieldSearch.getText().toLowerCase();
+        if(txtfieldSearch.getText() != null && btnsearch.getText().equals("Search"))
+        {
+            tbvMovies.setItems(movieModel.getSearchResults(query));
+            btnsearch.setText("Clear");
+        }
+        else if (btnsearch.getText().equals("Clear"))
+        {
+            txtfieldSearch.clear();
+            btnsearch.setText("Search");
+            tbvMovies.setItems(movieModel.getMovieObservableList());
+        }
+    }
+
+    @FXML
+    private void searchOnButtonPress(KeyEvent keyEvent) {
+        String query = txtfieldSearch.getText().toLowerCase();
+        if(txtfieldSearch.getText() != null && keyEvent.getCode() == KeyCode.ENTER)
+        {
+            btnsearch.setText("Clear");
+            tbvMovies.setItems(movieModel.getSearchResults(query));
+        }
     }
 
     @Override
@@ -97,10 +124,12 @@ public class MainController extends BaseController {
     }
 
     private void initializeMovies(){
+        movieModel = getModelsHandler().getMovieModel();
         tbvMovies.setItems(getModelsHandler().getMovieModel().getMovieObservableList());
         clmTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         clmCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryNames"));
         clmIMDB.setCellValueFactory(new PropertyValueFactory<>("Rating"));
         clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
+
 }
