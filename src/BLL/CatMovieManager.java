@@ -1,6 +1,7 @@
 package BLL;
 
 import BE.CatMovie;
+import BE.Movie;
 import BLL.Interfaces.ICatMovieManager;
 import DAL.DB.CatMovieDAO_DB;
 import DAL.Interfaces.ICatMovieDAO;
@@ -21,5 +22,14 @@ public class CatMovieManager implements ICatMovieManager {
      */
     public List<CatMovie> getAllCatMovies() throws Exception{
         return catMovieDAO.getAllCatMovies();
+    }
+
+    /**
+     * Inserts a newly created movie relations into the database.
+     * @param movie the created movie.
+     * @throws Exception if it fails to create a movie.
+     */
+    public void createMovies(Movie movie) throws Exception{
+        catMovieDAO.createMovies(movie);
     }
 }

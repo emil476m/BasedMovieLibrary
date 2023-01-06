@@ -5,11 +5,10 @@ import BE.Category;
 import BE.Movie;
 import DAL.Interfaces.ICatMovieDAO;
 import DAL.Interfaces.IMovieDAO;
+import DAL.Util.LocalFileHandler;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.nio.file.Path;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +53,48 @@ public class MovieDAO_DB implements IMovieDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new Exception("Failed to retrieve movies", e);
+        }
+    }
+
+    /**
+     * Inserts a newly created movie into the database and returns the movies' id.
+     * @param movie the created movie.
+     * @return movie with id.
+     * @throws Exception if it fails to create a movie.
+     */
+    @Override
+    public Movie createMovie(Movie movie) throws Exception {
+
+        String sql = "INSERT INTO Movie (MovieName, Rating, MoviePath) VALUES (?,?,?) ;";
+
+        try(Connection connection = databaseConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+
+            Path relativePath = LocalFileHandler.createLocalFile(movie.getFilePath());
+
+            String title = movie.getTitle();
+            Double rating = movie.getRating();
+            String path = String.valueOf(relativePath);
+
+
+            statement.setString(1, title);
+            statement.setDouble(2, rating);
+            statement.setString(3, path);
+
+            statement.executeUpdate();
+            Movie generatedMovie = null;
+
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                generatedMovie = new Movie(id, rating, movie.getCategories(), path, title);
+            }
+
+            return generatedMovie;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Failed to create movie", e);
         }
     }
 }

@@ -18,6 +18,14 @@ private String title;
         this.filePath = filePath;
         this.title = title;
     }
+
+    public Movie(double rating, List<Category> categories, String filePath, String title) {
+        this.rating = rating;
+        this.categories = categories;
+        this.filePath = filePath;
+        this.title = title;
+    }
+
     public Movie(int id, double rating, String filePath, String title) {
         this.id = id;
         this.rating = rating;
@@ -58,12 +66,15 @@ private String title;
         return categories;
     }
     public String getCategoryNames(){
-        String allCatNames = "";
-        for (int i = 0; i< categories.size()-1; i++){
-            allCatNames += categories.get(i).getName() + ", ";
+        if (!categories.isEmpty()) {
+            String allCatNames = "";
+            for (int i = 0; i < categories.size() - 1; i++) {
+                allCatNames += categories.get(i).getName() + ", ";
+            }
+            allCatNames += categories.get(categories.size() - 1);
+            return allCatNames;
         }
-        allCatNames += categories.get(categories.size()-1);
-        return allCatNames;
+        return null;
     }
 
     public void addCategory(Category category) {

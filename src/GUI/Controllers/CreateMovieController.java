@@ -1,11 +1,36 @@
 package GUI.Controllers;
 
+import BE.Category;
+import BE.Movie;
+import GUI.Util.ExceptionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateMovieController extends BaseController {
+    @FXML
+    private TableView<Category> tbvAllCatsForMovie;
+    @FXML
+    private TableColumn<Category, String> clmAllMovieCats;
+    @FXML
+    private TableView<Category> tbvMovieCats;
+    @FXML
+    private TableColumn<Category, String> clmMovieCats;
     @FXML
     private Button btnCancel;
     @FXML
@@ -23,28 +48,195 @@ public class CreateMovieController extends BaseController {
     @FXML
     private Button btnRemoveCat;
 
+    private Category selectedAllCat;
+
+    private Category selectedMovieCat;
+
+
+    private File file;
+
+    public CreateMovieController(){
+    }
+
     @FXML
-    private void handleCancel(ActionEvent actionEvent) {
+    private void handleCancel() {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
     private void handleChooseFilepath(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Add your song");
+
+        FileChooser.ExtensionFilter videoExtensions = new FileChooser.ExtensionFilter("Video files", "*.mp4");
+
+        fileChooser.getExtensionFilters().add(videoExtensions);
+
+        file = fileChooser.showOpenDialog((Stage) btnCancel.getScene().getWindow());
+
+        if(file != null) {
+            txtfieldFilepath.setText(file.getAbsolutePath());
+        }
     }
 
     @FXML
-    private void handleCreateMovie(ActionEvent actionEvent) {
+    private void handleCreateMovie() {
+        if (isInputMissing()) {
+            return;
+        }
+
+        String title = txtfieldTitle.getText();
+        Double rating = Double.parseDouble(txtfieldIMDBRating.getText());
+        String path = txtfieldFilepath.getText();
+        List<Category> categoryList = getModelsHandler().getMovieModel().getCategoryObservableList();
+
+        Movie movie = new Movie(rating, categoryList, path, title);
+
+        try {
+            getModelsHandler().getMovieModel().createMovie(movie);
+            handleCancel();
+        } catch (Exception e) {
+            ExceptionHandler.displayError(e);
+        }
+
+
     }
 
     @FXML
     private void handleAddCat(ActionEvent actionEvent) {
+        getModelsHandler().getMovieModel().addCatToCreateMovieView(selectedAllCat);
+        tbvMovieCats.refresh();
     }
 
     @FXML
     private void handleRemoveCat(ActionEvent actionEvent) {
+        getModelsHandler().getMovieModel().removeCatFromCreateMovie(selectedMovieCat);
+        tbvMovieCats.refresh();
     }
 
     @Override
     public void setup() {
+        disableButtons();
+        addTitleListener();
+        showCategories();
+        addFileListener();
+        addRatingListener();
+        addAllCategorySelectionListener();
+        addMovieCategorySelectionListener();
+    }
 
+    private void showCategories(){
+        tbvAllCatsForMovie.setItems(getModelsHandler().getCategoryModel().getCategories());
+        clmAllMovieCats.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        tbvMovieCats.setItems(getModelsHandler().getMovieModel().getCategoryObservableList());
+        clmMovieCats.setCellValueFactory(new PropertyValueFactory<>("name"));
+    }
+
+    private void disableButtons(){
+        btnCreateMovie.setDisable(true);
+        btnAddCat.setDisable(true);
+        btnRemoveCat.setDisable(true);
+    }
+
+    private void addTitleListener(){
+        txtfieldTitle.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (isFileEmpty()) {
+                btnCreateMovie.setDisable(true);
+            }
+            else if (!isTitleEmpty() && !isRatingEmpty()) {
+                btnCreateMovie.setDisable(false);
+            }
+        });
+    }
+
+    private void addRatingListener(){
+        txtfieldIMDBRating.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (isFileEmpty()) {
+                btnCreateMovie.setDisable(true);
+            }
+            else if (!isTitleEmpty() && !isRatingEmpty()) {
+                btnCreateMovie.setDisable(false);
+            }
+        });
+    }
+
+    private void addFileListener(){
+        txtfieldFilepath.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (isFileEmpty()) {
+                btnCreateMovie.setDisable(true);
+            }
+            else if (!isTitleEmpty() && !isRatingEmpty()) {
+                btnCreateMovie.setDisable(false);
+            }
+        });
+    }
+
+    private boolean isTitleEmpty() {
+        return txtfieldTitle.getText() == null || txtfieldTitle.getText().trim().isEmpty();
+    }
+
+    private boolean isFileEmpty() {
+        return txtfieldFilepath.getText() == null || txtfieldFilepath.getText().trim().isEmpty();
+    }
+
+    private boolean isRatingEmpty() {
+        return txtfieldIMDBRating.getText() == null || txtfieldIMDBRating.getText().trim().isEmpty();
+    }
+
+    private boolean isInputMissing() {
+        if (isFileEmpty()) {
+            ExceptionHandler.displayError(new Exception("No movie file is chosen"));
+            return true;
+        }
+
+        if (isRatingEmpty()) {
+            ExceptionHandler.displayError(new Exception("Rating can not be empty"));
+            return true;
+        }
+
+        if (isTitleEmpty()) {
+            ExceptionHandler.displayError(new Exception("Title can not be empty"));
+            return true;
+        }
+        return false;
+    }
+
+    /*/**
+     * Allows updating by pressing Enter (instead of using the OK-button).
+     * @param keyEvent, a key-press
+     */
+    /*public void handleEnter(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            handleCreateMovie();
+            System.out.println();
+        }
+    }*/
+
+    private void addAllCategorySelectionListener() {
+        tbvAllCatsForMovie.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedAllCat = newValue;
+                btnAddCat.setDisable(false);
+            }
+            else {
+                selectedAllCat = null;
+                btnAddCat.setDisable(true);
+            }
+        });
+    }
+
+    private void addMovieCategorySelectionListener() {
+        tbvMovieCats.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedMovieCat = newValue;
+                btnRemoveCat.setDisable(false);
+            }
+            else {
+                selectedMovieCat = null;
+                btnRemoveCat.setDisable(true);
+            }
+        });
     }
 }
