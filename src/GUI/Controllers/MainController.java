@@ -12,9 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
@@ -23,9 +22,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -56,6 +58,9 @@ public class MainController extends BaseController {
     private TextField txtfieldSearch;
     @FXML
     private Button btnsearch;
+
+    private Movie selectedMovie;
+    private File directory;
 
     public MainController() {
 
@@ -154,6 +159,32 @@ public class MainController extends BaseController {
     private void handleClose(ActionEvent actionEvent) {
     }
 
+    /**
+     * opens the standard browser of the computer on a IMDB search for the selected movie
+     * @param actionEvent
+     */
     public void handleShowIMDB(ActionEvent actionEvent) {
+        try{
+            Desktop desktop = Desktop.getDesktop();
+            String link = "http://www.imdb.com/find?s=tt&q=";
+            selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
+            String title = selectedMovie.getTitle().replace(" ", "");
+            if(desktop.isSupported(Desktop.Action.BROWSE))
+            {
+                try
+                {
+                    desktop.browse(URI.create(link+title));
+                }
+                catch (Exception e)
+                {
+                    ExceptionHandler.displayError(e);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "you don't have a movie selected", ButtonType.CLOSE);
+            alert.showAndWait();
+        }
     }
 }
