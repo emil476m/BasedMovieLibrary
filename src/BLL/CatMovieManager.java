@@ -2,6 +2,7 @@ package BLL;
 
 import BE.CatMovie;
 import BE.Movie;
+import BE.Category;
 import BLL.Interfaces.ICatMovieManager;
 import DAL.DB.CatMovieDAO_DB;
 import DAL.Interfaces.ICatMovieDAO;
@@ -31,5 +32,16 @@ public class CatMovieManager implements ICatMovieManager {
      */
     public void createMovies(Movie movie) throws Exception{
         catMovieDAO.createMovies(movie);
+    }
+
+    /**
+     * Instructs the cat movie DAO to delete
+     * the relations of a category.
+     * @param category The category to delete relations of.
+     * @throws Exception If it fails to delete the relations.
+     */
+    @Override
+    public void deleteWhereCat(Category category) throws Exception {
+        catMovieDAO.deleteWhereCat(category);
     }
 }
