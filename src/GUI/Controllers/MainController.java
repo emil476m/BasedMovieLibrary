@@ -92,6 +92,11 @@ public class MainController extends BaseController {
     @FXML
     private void handleRemoveMovie(ActionEvent actionEvent) {
     }
+
+    /**
+     * searches for movies when the search button is pressed and if there has been made a search it clears it if you press the same button
+     * @param actionEvent
+     */
     @FXML
     private void handleSearch(ActionEvent actionEvent) {
         String query = txtfieldSearch.getText().toLowerCase();
@@ -108,6 +113,10 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * searches for movies with a given parameter if the user presses the enter key
+     * @param keyEvent
+     */
     @FXML
     private void searchOnButtonPress(KeyEvent keyEvent) {
         String query = txtfieldSearch.getText().toLowerCase();

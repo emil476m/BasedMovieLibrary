@@ -54,6 +54,11 @@ public class MovieModel {
         return null;
     }
 
+    /**
+     * searches through the movieObservableList to find movies that contain the search query and adds them to a different observableList
+     * @param query
+     * @return the list of movies that contain the query
+     */
     public ObservableList<Movie> getSearchResults(String query)
     {
         ObservableList<Movie> searchResults = FXCollections.observableArrayList();
