@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController extends BaseController {
+    public Button btnIMDB;
     @FXML
     private Button btnEditPRating;
     @FXML
@@ -117,5 +118,8 @@ public class MainController extends BaseController {
 
     @FXML
     private void handleClose(ActionEvent actionEvent) {
+    }
+
+    public void handleShowIMDB(ActionEvent actionEvent) {
     }
 }

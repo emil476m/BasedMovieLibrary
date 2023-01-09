@@ -59,6 +59,7 @@
                         <Insets left="50.0" />
                      </GridPane.margin>
                   </Button>
+                  <Button fx:id="btnIMDB" mnemonicParsing="false" onAction="#handleShowIMDB" text="IMDB" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </children>
