@@ -19,4 +19,6 @@ public interface IMovieManager {
      * @throws Exception if it fails to create a movie.
      */
     Movie createMovie(Movie movie) throws Exception;
+
+    void deleteMovie(Movie movie) throws Exception;
 }

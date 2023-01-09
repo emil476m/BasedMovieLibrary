@@ -97,8 +97,23 @@ public class MainController extends BaseController {
                 getModelsHandler(),
                 "Failed to open categories");
     }
+
+    /**
+     * Tries to delete the selected movie.
+     * @param actionEvent
+     */
     @FXML
     private void handleRemoveMovie(ActionEvent actionEvent) {
+        Movie selectedMovie = tbvMovies.getSelectionModel().getSelectedItem();
+
+        if (selectedMovie != null) {
+            try {
+                getModelsHandler().getMovieModel().deleteMovie(selectedMovie);
+            }
+            catch (Exception e) {
+                ExceptionHandler.displayError(e);
+            }
+        }
     }
 
     private void search(String search) {
