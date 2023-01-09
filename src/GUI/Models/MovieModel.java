@@ -116,7 +116,6 @@ public class MovieModel {
         Movie newMovie =  movieManager.createMovie(movie);
         catMovieManager.createMovies(newMovie);
         movieObservableList.add(newMovie);
-        movieObservableList.clear();
     }
 
 
