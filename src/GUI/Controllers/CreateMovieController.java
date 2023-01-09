@@ -203,17 +203,6 @@ public class CreateMovieController extends BaseController {
         return false;
     }
 
-    /*/**
-     * Allows updating by pressing Enter (instead of using the OK-button).
-     * @param keyEvent, a key-press
-     */
-    /*public void handleEnter(KeyEvent keyEvent) {
-        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-            handleCreateMovie();
-            System.out.println();
-        }
-    }*/
-
     private void addAllCategorySelectionListener() {
         tbvAllCatsForMovie.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {

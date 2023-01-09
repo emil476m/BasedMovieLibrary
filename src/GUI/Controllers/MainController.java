@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainController extends BaseController {
@@ -166,12 +167,33 @@ public class MainController extends BaseController {
         clmIMDB.setCellValueFactory(new PropertyValueFactory<>("Rating"));
         clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
+
     @FXML
     private void handleEditPRating(ActionEvent actionEvent) {
+        Movie movie = tbvMovies.getSelectionModel().getSelectedItem();
+        TextInputDialog dialog = new TextInputDialog("" + movie.getPRating());
+        dialog.setTitle("Edit Personal Rating");
+        dialog.setHeaderText("Rate movie: " + movie.getTitle());
+        dialog.setContentText("What would you rate the movie?");
+
+// Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            //TODO make a check for int with alert box
+            Double rating = Double.parseDouble(result.get());
+            try {
+                getModelsHandler().getMovieModel().editPRating(movie, rating);
+                tbvMovies.refresh();
+            } catch (Exception e) {
+                ExceptionHandler.displayError(e);
+            }
+        }
     }
 
     @FXML
     private void handleClose(ActionEvent actionEvent) {
+        Stage stage = (Stage) btnClose.getScene().getWindow();
+        stage.close();
     }
 
     /**

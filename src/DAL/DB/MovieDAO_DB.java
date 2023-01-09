@@ -1,6 +1,9 @@
 package DAL.DB;
 
+import BE.CatMovie;
+import BE.Category;
 import BE.Movie;
+import DAL.Interfaces.ICatMovieDAO;
 import DAL.Interfaces.IMovieDAO;
 import DAL.Util.LocalFileHandler;
 
@@ -36,12 +39,12 @@ public class MovieDAO_DB implements IMovieDAO {
                 //map database row to object
                 int movieId = rs.getInt("Id");
                 double movieRating = rs.getDouble("Rating");
+                double moviePRating = rs.getDouble("PersonalRating");
                 String filePath = rs.getString("MoviePath");
                 String title = rs.getString("MovieName");
+                Date date = rs.getDate("LastView");
 
-
-
-                Movie movie = new Movie(movieId, movieRating, filePath, title);
+                Movie movie = new Movie(movieId, movieRating, filePath, title, moviePRating, date);
 
                 allMovies.add(movie);
             }
@@ -113,6 +116,29 @@ public class MovieDAO_DB implements IMovieDAO {
         catch (SQLException e) {
             e.printStackTrace();
             throw new Exception("Failed to delete movie");
+        }
+    }
+
+    /**
+     * It edits the personal rating of the movies in the database, that matches the id of the Movie object.
+     * @param movie last selected movie.
+     * @throws Exception if it fails to edit the database.
+     */
+    @Override
+    public void editPRating(Movie movie) throws Exception {
+        String sql = "UPDATE Movie SET PersonalRating = ? WHERE Id = ?;";
+        try (Connection connection = databaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setDouble(1, movie.getPRating());
+            statement.setInt(2, movie.getId());
+
+            //Run the specified SQL Statement
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Failed to update Personal Rating", e);
         }
     }
 }
