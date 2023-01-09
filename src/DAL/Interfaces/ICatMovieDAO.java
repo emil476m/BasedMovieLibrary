@@ -1,6 +1,7 @@
 package DAL.Interfaces;
 
 import BE.CatMovie;
+import BE.Category;
 import BE.Movie;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface ICatMovieDAO {
      * @throws Exception if it fails to create a movie.
      */
     void createMovies(Movie movie) throws Exception;
+
+    void deleteWhereCat(Category category) throws Exception;
 }

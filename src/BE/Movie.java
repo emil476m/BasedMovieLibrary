@@ -81,6 +81,8 @@ private String title;
         this.categories.add(category);
     }
 
+    public void removeCategory(Category category) { this.categories.remove(category); }
+
     public String getFilePath() {
         return filePath;
     }

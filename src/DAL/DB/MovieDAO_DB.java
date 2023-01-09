@@ -1,9 +1,6 @@
 package DAL.DB;
 
-import BE.CatMovie;
-import BE.Category;
 import BE.Movie;
-import DAL.Interfaces.ICatMovieDAO;
 import DAL.Interfaces.IMovieDAO;
 import DAL.Util.LocalFileHandler;
 
@@ -95,6 +92,27 @@ public class MovieDAO_DB implements IMovieDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new Exception("Failed to create movie", e);
+        }
+    }
+
+    /**
+     * Deletes a movie from the database.
+     * @param movie The movie to delete.
+     * @throws Exception If it fails to delete the movie.
+     */
+    @Override
+    public void deleteMovie(Movie movie) throws Exception {
+        String sql = "DELETE FROM Movie WHERE Id = ?";
+
+        try (Connection connection = databaseConnector.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, movie.getId());
+
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Failed to delete movie");
         }
     }
 }
