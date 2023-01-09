@@ -21,4 +21,14 @@ public class MovieManager implements IMovieManager {
     public List<Movie> getAllMovies() throws Exception {
         return movieDAO.getAllMovies();
     }
+
+    /**
+     * Inserts a newly created movie into the database and returns the movies' id.
+     * @param movie the created movie.
+     * @return movie with id.
+     * @throws Exception if it fails to create a movie.
+     */
+    public Movie createMovie(Movie movie) throws Exception{
+        return movieDAO.createMovie(movie);
+    }
 }

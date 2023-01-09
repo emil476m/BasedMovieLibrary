@@ -31,6 +31,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController extends BaseController {
+    public Button btnIMDB;
+    @FXML
+    private Button btnEditPRating;
+    @FXML
+    private Button btnClose;
     @FXML
     private TableView<Movie> tbvMovies;
     @FXML
@@ -132,6 +137,9 @@ public class MainController extends BaseController {
         initializeMovies();
     }
 
+    /**
+     * shows the movies in the view.
+     */
     private void initializeMovies(){
         movieModel = getModelsHandler().getMovieModel();
         tbvMovies.setItems(getModelsHandler().getMovieModel().getMovieObservableList());
@@ -140,5 +148,14 @@ public class MainController extends BaseController {
         clmIMDB.setCellValueFactory(new PropertyValueFactory<>("Rating"));
         clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
+    @FXML
+    private void handleEditPRating(ActionEvent actionEvent) {
+    }
 
+    @FXML
+    private void handleClose(ActionEvent actionEvent) {
+    }
+
+    public void handleShowIMDB(ActionEvent actionEvent) {
+    }
 }
