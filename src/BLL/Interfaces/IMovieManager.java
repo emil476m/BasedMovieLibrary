@@ -11,4 +11,6 @@ public interface IMovieManager {
      * @throws Exception throws exception if it fails to return a list of Movie objects.
      */
     List<Movie> getAllMovies() throws Exception;
+
+    void deleteMovie(Movie movie) throws Exception;
 }

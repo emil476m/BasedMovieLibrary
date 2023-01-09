@@ -10,5 +10,7 @@ public interface IMovieDAO {
      * @return A list of all Movies.
      * @throws Exception throws exception if it fails to return a list of Movie objects.
      */
-    public List<Movie> getAllMovies() throws Exception;
+    List<Movie> getAllMovies() throws Exception;
+
+    void deleteMovie(Movie movie) throws Exception;
 }

@@ -54,4 +54,15 @@ public class MovieModel {
         return null;
     }
 
+    /**
+     * Instructs the movie manager to delete a movie,
+     * and then removes the same movie from the list.
+     * @param movie The movie to delete.
+     * @throws Exception If it fails to delete the movie.
+     */
+    public void deleteMovie(Movie movie) throws Exception {
+        movieManager.deleteMovie(movie);
+
+        movieObservableList.remove(movie);
+    }
 }

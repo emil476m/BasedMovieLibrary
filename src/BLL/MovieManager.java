@@ -21,4 +21,14 @@ public class MovieManager implements IMovieManager {
     public List<Movie> getAllMovies() throws Exception {
         return movieDAO.getAllMovies();
     }
+
+    /**
+     * Instructs the movie DAO to delete a movie.
+     * @param movie The movie to delete.
+     * @throws Exception If it fails to delete the movie.
+     */
+    @Override
+    public void deleteMovie(Movie movie) throws Exception {
+        movieDAO.deleteMovie(movie);
+    }
 }
