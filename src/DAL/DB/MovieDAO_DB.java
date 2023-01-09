@@ -38,7 +38,7 @@ public class MovieDAO_DB implements IMovieDAO {
             while(rs.next()){
                 //map database row to object
                 int movieId = rs.getInt("Id");
-                int movieRating = rs.getInt("Rating");
+                double movieRating = rs.getDouble("Rating");
                 String filePath = rs.getString("MoviePath");
                 String title = rs.getString("MovieName");
 
@@ -73,7 +73,7 @@ public class MovieDAO_DB implements IMovieDAO {
             Path relativePath = LocalFileHandler.createLocalFile(movie.getFilePath());
 
             String title = movie.getTitle();
-            Double rating = movie.getRating();
+            double rating = movie.getRating();
             String path = String.valueOf(relativePath);
 
 
