@@ -68,24 +68,16 @@ public class MovieModel {
         ObservableList<Movie> searchResults = FXCollections.observableArrayList();
         for (Movie m: movieObservableList)
         {
-            if(m.getTitle().toLowerCase().contains(query))
-            {
-                searchResults.add(m);
-            }
-           if (m.getCategoryNames().toLowerCase().contains(query))
-            {
-                searchResults.add(m);
-            }
-           if(String.valueOf(m.getRating()).contains(query))
-           {
-               searchResults.add(m);
-           }
-            if(String.valueOf(m.getPRating()).contains(query))
-            {
-                searchResults.add(m);
-            }
+            boolean titleContains = m.getTitle().toLowerCase().contains(query);
+            boolean categoriesContains = m.getCategoryNames().toLowerCase().contains(query);
+            boolean ratingContains = String.valueOf(m.getRating()).contains(query);
+            boolean pRatingContains = String.valueOf(m.getPRating()).contains(query);
 
+            boolean addMovie = titleContains || categoriesContains || ratingContains || pRatingContains;
+
+            if (addMovie) searchResults.add(m);
         }
+
         return searchResults;
     }
     public ObservableList<Category> getCategoryObservableList() {

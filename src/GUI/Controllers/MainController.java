@@ -56,8 +56,6 @@ public class MainController extends BaseController {
     private TextField txtfieldSearch;
     @FXML
     private Button btnsearch;
-    
-    private MovieModel movieModel;
 
     public MainController() {
 
@@ -98,23 +96,27 @@ public class MainController extends BaseController {
     private void handleRemoveMovie(ActionEvent actionEvent) {
     }
 
+    private void search(String search) {
+        String query = search.toLowerCase();
+        tbvMovies.setItems(getModelsHandler().getMovieModel().getSearchResults(query));
+    }
+
     /**
      * searches for movies when the search button is pressed and if there has been made a search it clears it if you press the same button
      * @param actionEvent
      */
     @FXML
     private void handleSearch(ActionEvent actionEvent) {
-        String query = txtfieldSearch.getText().toLowerCase();
-        if(txtfieldSearch.getText() != null && btnsearch.getText().equals("Search"))
-        {
-            tbvMovies.setItems(movieModel.getSearchResults(query));
-            btnsearch.setText("Clear");
-        }
-        else if (btnsearch.getText().equals("Clear"))
-        {
-            txtfieldSearch.clear();
-            btnsearch.setText("Search");
-            tbvMovies.setItems(movieModel.getMovieObservableList());
+        String search = txtfieldSearch.getText();
+
+        if(search != null) search(search);
+    }
+
+    @FXML
+    private void onClearSearch(ActionEvent actionEvent) {
+        if (!txtfieldSearch.getText().isEmpty()) {
+            txtfieldSearch.setText("");
+            search("");
         }
     }
 
@@ -124,12 +126,9 @@ public class MainController extends BaseController {
      */
     @FXML
     private void searchOnButtonPress(KeyEvent keyEvent) {
-        String query = txtfieldSearch.getText().toLowerCase();
-        if(txtfieldSearch.getText() != null && keyEvent.getCode() == KeyCode.ENTER)
-        {
-            btnsearch.setText("Clear");
-            tbvMovies.setItems(movieModel.getSearchResults(query));
-        }
+        String query = txtfieldSearch.getText();
+
+        if(query != null && keyEvent.getCode() == KeyCode.ENTER) search(query);
     }
 
     @Override
@@ -141,7 +140,6 @@ public class MainController extends BaseController {
      * shows the movies in the view.
      */
     private void initializeMovies(){
-        movieModel = getModelsHandler().getMovieModel();
         tbvMovies.setItems(getModelsHandler().getMovieModel().getMovieObservableList());
         clmTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         clmCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryNames"));
