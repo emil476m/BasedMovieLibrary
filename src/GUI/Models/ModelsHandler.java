@@ -18,6 +18,9 @@ public class ModelsHandler {
         initializeMovieCategories();
     }
 
+    /**
+     * finds the correct category name/type from at category id.
+     */
     private void initializeMovieCategories(){
         for (CatMovie catMovie: movieModel.getCatMovieList()){
             Movie movie = movieModel.getMovieFromID(catMovie.getMovieId());
