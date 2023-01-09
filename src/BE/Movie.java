@@ -1,5 +1,6 @@
 package BE;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ private double pRating;
 private List<Category> categories;
 private String filePath;
 private String title;
+private Date lastViewed;
 
     public Movie(int id, double rating, List<Category> categories, String filePath, String title) {
         this.id = id;
@@ -26,12 +28,14 @@ private String title;
         this.title = title;
     }
 
-    public Movie(int id, double rating, String filePath, String title) {
+    public Movie(int id, double rating, String filePath, String title, double pRating, Date lastViewed) {
         this.id = id;
         this.rating = rating;
         this.filePath = filePath;
         this.title = title;
         categories = new ArrayList<>();
+        this.pRating = pRating;
+        this.lastViewed = lastViewed;
     }
 
     public int getId() {
@@ -87,5 +91,13 @@ private String title;
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public Date getLastViewed() {
+        return lastViewed;
+    }
+
+    public void setLastViewed(Date lastViewed) {
+        this.lastViewed = lastViewed;
     }
 }

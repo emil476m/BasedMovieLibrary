@@ -20,4 +20,11 @@ public interface IMovieDAO {
      * @throws Exception if it fails to create a movie.
      */
     Movie createMovie(Movie movie) throws Exception;
+
+    /**
+     * It edits the personal rating of the movies in the database, that matches the id of the Movie object.
+     * @param movie last selected movie.
+     * @throws Exception if it fails to edit the database.
+     */
+    void editPRating(Movie movie) throws Exception;
 }

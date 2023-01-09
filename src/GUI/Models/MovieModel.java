@@ -73,6 +73,13 @@ public class MovieModel {
         Movie newMovie =  movieManager.createMovie(movie);
         catMovieManager.createMovies(newMovie);
         movieObservableList.add(newMovie);
+        movieObservableList.clear();
+    }
+
+
+    public void editPRating(Movie movie, double newRating) throws Exception {
+        movie.setPRating(newRating);
+        movieManager.editPRating(movie);
     }
 
 
