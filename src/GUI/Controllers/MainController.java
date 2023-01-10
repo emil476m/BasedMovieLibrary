@@ -134,7 +134,7 @@ public class MainController extends BaseController {
 
     @FXML
     private void onClearSearch(ActionEvent actionEvent) {
-        if (!txtfieldSearch.getText().isEmpty()) {
+        if (txtfieldSearch.getText() != null) {
             txtfieldSearch.setText("");
             search("");
         }
