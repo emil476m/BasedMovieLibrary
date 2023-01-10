@@ -44,4 +44,15 @@ public class CatMovieManager implements ICatMovieManager {
     public void deleteWhereCat(Category category) throws Exception {
         catMovieDAO.deleteWhereCat(category);
     }
+
+    /**
+     * Instructs the cat movie DAO to delete
+     * the relations of a movie.
+     * @param movie The movie to delete relations of.
+     * @throws Exception If it fails to delete the relations.
+     */
+    @Override
+    public void deleteWhereMovie(Movie movie) throws Exception {
+        catMovieDAO.deleteWhereMovie(movie);
+    }
 }

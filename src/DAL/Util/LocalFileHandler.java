@@ -1,8 +1,10 @@
 package DAL.Util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -19,9 +21,12 @@ public class LocalFileHandler {
             Path newPath = Paths.get(path);
             Files.delete(newPath);
         }
-        catch (Exception e) {
+        catch (IOException e) {
             e.printStackTrace();
-            throw new Exception("Failed to delete local file", e);
+
+            if (!(e instanceof NoSuchFileException)) {
+                throw new Exception("Failed to delete local file", e);
+            }
         }
     }
 
