@@ -18,7 +18,6 @@ public class ConfirmOK {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         //alert.getDialogPane().getStylesheets().removeAll();
         //alert.getDialogPane().getStylesheets().add(MainController.currentStyle);
-        alert.initStyle(StageStyle.UNDECORATED);
         alert.setTitle("Confirm Delete");
         alert.setHeaderText(header);
         alert.setContentText(content);
