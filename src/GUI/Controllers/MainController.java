@@ -18,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -138,7 +140,7 @@ public class MainController extends BaseController {
 
     @FXML
     private void onClearSearch(ActionEvent actionEvent) {
-        if (!txtfieldSearch.getText().isEmpty()) {
+        if (txtfieldSearch.getText() != null) {
             txtfieldSearch.setText("");
             search("");
         }
@@ -225,6 +227,36 @@ public class MainController extends BaseController {
         {
             Alert alert = new Alert(Alert.AlertType.WARNING, "you don't have a movie selected", ButtonType.CLOSE);
             alert.showAndWait();
+        }
+    }
+
+    /**
+     * plays the selected movie on a double click
+     * @param mouseEvent
+     */
+    @FXML
+    private void playMovie(MouseEvent mouseEvent)
+    {
+        if(mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == 2)
+        {
+            openMediaPlayer();
+        }
+    }
+
+    private void openMediaPlayer()
+    {
+        selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
+        if (selectedMovie != null) {
+            directory = new File(selectedMovie.getFilePath());
+            Desktop desktop = Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.OPEN)) {
+                try {
+                    desktop.open(directory.getAbsoluteFile());
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "the chosen movie's file does not exist", ButtonType.CLOSE);
+                    alert.showAndWait();
+                }
+            }
         }
     }
 }
