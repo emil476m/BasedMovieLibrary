@@ -11,10 +11,12 @@ import BE.Movie;
 public class ModelsHandler {
     private CategoryModel categoryModel;
     private MovieModel movieModel;
+    private DeleteReminderModel deleteReminderModel;
 
     public ModelsHandler() throws Exception {
         categoryModel = new CategoryModel();
         movieModel = new MovieModel();
+        deleteReminderModel = new DeleteReminderModel();
         initializeMovieCategories();
     }
 
@@ -38,4 +40,6 @@ public class ModelsHandler {
     }
 
     public MovieModel getMovieModel() { return movieModel; }
+
+    public DeleteReminderModel getDeleteReminderModel() { return deleteReminderModel; }
 }

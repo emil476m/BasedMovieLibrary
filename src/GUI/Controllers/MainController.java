@@ -29,12 +29,11 @@ import java.io.IOException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 
 public class MainController extends BaseController {
     public Button btnIMDB;
@@ -228,18 +227,6 @@ public class MainController extends BaseController {
         {
             Alert alert = new Alert(Alert.AlertType.WARNING, "you don't have a movie selected", ButtonType.CLOSE);
             alert.showAndWait();
-        }
-    }
-
-    private void checkDate()
-    {
-        ArrayList<Movie> movies = (ArrayList<Movie>) getModelsHandler().getMovieModel().getMovieObservableList();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-mm-dd");
-        LocalDateTime now = LocalDateTime.now();
-
-        for (Movie m: movies)
-        {
-            
         }
     }
 }
