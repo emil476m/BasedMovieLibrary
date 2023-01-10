@@ -221,17 +221,16 @@ public class MainController extends BaseController {
     private void openMediaPlayer()
     {
         selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
-        directory = new File(selectedMovie.getFilePath());
-        Desktop desktop = Desktop.getDesktop();
-        if(desktop.isSupported(Desktop.Action.OPEN))
-        {
-            try
-            {
-                desktop.open(directory.getAbsoluteFile());
-            }
-            catch (Exception e)
-            {
-                ExceptionHandler.displayError(e);
+        if (selectedMovie != null) {
+            directory = new File(selectedMovie.getFilePath());
+            Desktop desktop = Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.OPEN)) {
+                try {
+                    desktop.open(directory.getAbsoluteFile());
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "the chosen movie's file does not exist", ButtonType.CLOSE);
+                    alert.showAndWait();
+                }
             }
         }
     }
