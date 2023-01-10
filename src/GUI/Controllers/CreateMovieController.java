@@ -3,6 +3,7 @@ package GUI.Controllers;
 import BE.Category;
 import BE.Movie;
 import GUI.Util.ExceptionHandler;
+import GUI.Util.TextLimiter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -56,6 +57,7 @@ public class CreateMovieController extends BaseController {
     private File file;
 
     public CreateMovieController(){
+
     }
 
     @FXML
@@ -85,7 +87,6 @@ public class CreateMovieController extends BaseController {
         if (isInputMissing()) {
             return;
         }
-
         String title = txtfieldTitle.getText();
         Double rating = Double.parseDouble(txtfieldIMDBRating.getText());
         String path = txtfieldFilepath.getText();
@@ -101,6 +102,13 @@ public class CreateMovieController extends BaseController {
         }
 
 
+    }
+
+    private void setTextLimit(){
+        TextLimiter textLimiter = new TextLimiter();
+        String IMDBPattern = ".{0,4}|\\d+\\,\\d*";
+        String IMDBPatterV2 = ".{0,4}";
+        textLimiter.textLimit(txtfieldIMDBRating, IMDBPatterV2);
     }
 
     @FXML
@@ -124,6 +132,7 @@ public class CreateMovieController extends BaseController {
         addRatingListener();
         addAllCategorySelectionListener();
         addMovieCategorySelectionListener();
+        setTextLimit();
     }
 
     private void showCategories(){
@@ -192,7 +201,7 @@ public class CreateMovieController extends BaseController {
         }
 
         if (isRatingEmpty()) {
-            ExceptionHandler.displayError(new Exception("Rating can not be empty"));
+            ExceptionHandler.displayError(new Exception("IMDB rating can not be empty"));
             return true;
         }
 
