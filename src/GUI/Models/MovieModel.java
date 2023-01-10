@@ -118,6 +118,12 @@ public class MovieModel {
         movieObservableList.add(newMovie);
     }
 
+
+    public void editPRating(Movie movie, double newRating) throws Exception {
+        movie.setPRating(newRating);
+        movieManager.editPRating(movie);
+    }
+
     /**
      * Instructs the movie manager to delete a movie,
      * and then removes the same movie from the list.

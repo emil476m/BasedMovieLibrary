@@ -18,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainController extends BaseController {
@@ -70,6 +73,9 @@ public class MainController extends BaseController {
 
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
+        //clears category tableview for createMovieController
+        getModelsHandler().getMovieModel().getCategoryObservableList().clear();
+
         //Load the new stage & view
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/CreateMovieView.fxml"));
         Parent root = null;
@@ -134,7 +140,7 @@ public class MainController extends BaseController {
 
     @FXML
     private void onClearSearch(ActionEvent actionEvent) {
-        if (!txtfieldSearch.getText().isEmpty()) {
+        if (txtfieldSearch.getText() != null) {
             txtfieldSearch.setText("");
             search("");
         }
@@ -166,12 +172,33 @@ public class MainController extends BaseController {
         clmIMDB.setCellValueFactory(new PropertyValueFactory<>("Rating"));
         clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
+
     @FXML
     private void handleEditPRating(ActionEvent actionEvent) {
+        Movie movie = tbvMovies.getSelectionModel().getSelectedItem();
+        TextInputDialog dialog = new TextInputDialog("" + movie.getPRating());
+        dialog.setTitle("Edit Personal Rating");
+        dialog.setHeaderText("Rate movie: " + movie.getTitle());
+        dialog.setContentText("What would you rate the movie?");
+
+// Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            //TODO make a check for int with alert box
+            Double rating = Double.parseDouble(result.get());
+            try {
+                getModelsHandler().getMovieModel().editPRating(movie, rating);
+                tbvMovies.refresh();
+            } catch (Exception e) {
+                ExceptionHandler.displayError(e);
+            }
+        }
     }
 
     @FXML
     private void handleClose(ActionEvent actionEvent) {
+        Stage stage = (Stage) btnClose.getScene().getWindow();
+        stage.close();
     }
 
     /**
@@ -200,6 +227,36 @@ public class MainController extends BaseController {
         {
             Alert alert = new Alert(Alert.AlertType.WARNING, "you don't have a movie selected", ButtonType.CLOSE);
             alert.showAndWait();
+        }
+    }
+
+    /**
+     * plays the selected movie on a double click
+     * @param mouseEvent
+     */
+    @FXML
+    private void playMovie(MouseEvent mouseEvent)
+    {
+        if(mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == 2)
+        {
+            openMediaPlayer();
+        }
+    }
+
+    private void openMediaPlayer()
+    {
+        selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
+        if (selectedMovie != null) {
+            directory = new File(selectedMovie.getFilePath());
+            Desktop desktop = Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.OPEN)) {
+                try {
+                    desktop.open(directory.getAbsoluteFile());
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "the chosen movie's file does not exist", ButtonType.CLOSE);
+                    alert.showAndWait();
+                }
+            }
         }
     }
 }
