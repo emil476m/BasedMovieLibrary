@@ -141,4 +141,38 @@ public class MovieDAO_DB implements IMovieDAO {
             throw new Exception("Failed to update Personal Rating", e);
         }
     }
+
+    public List<Movie> getAllOldMovies() throws Exception {
+        ArrayList<Movie> allMovies = new ArrayList<>();
+
+        try(Connection connection = databaseConnector.getConnection();
+            Statement statement = connection.createStatement()) {
+            String sql = "SELECT *\n" +
+                    "FROM Movie\n" +
+                    "Where DATEDIFF(HOUR, LastView, GETDATE()) > 17520\n" +
+                    "And PersonalRating < 6;";
+
+            ResultSet rs = statement.executeQuery(sql);
+
+            // Loop through rows from database result set
+            while(rs.next()){
+                //map database row to object
+                int movieId = rs.getInt("Id");
+                double movieRating = rs.getDouble("Rating");
+                double moviePRating = rs.getDouble("PersonalRating");
+                String filePath = rs.getString("MoviePath");
+                String title = rs.getString("MovieName");
+                Date date = rs.getDate("LastView");
+
+                Movie movie = new Movie(movieId, movieRating, filePath, title, moviePRating, date);
+
+                allMovies.add(movie);
+            }
+
+            return allMovies;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Failed to retrieve movies", e);
+        }
+    }
 }

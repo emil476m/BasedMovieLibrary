@@ -29,4 +29,6 @@ public interface IMovieDAO {
      * @throws Exception if it fails to edit the database.
      */
     void editPRating(Movie movie) throws Exception;
+
+    List<Movie> getAllOldMovies() throws Exception;
 }
