@@ -112,6 +112,8 @@ public class MovieDAO_DB implements IMovieDAO {
             statement.setInt(1, movie.getId());
 
             statement.executeUpdate();
+
+            LocalFileHandler.deleteLocalFile(movie.getFilePath());
         }
         catch (SQLException e) {
             e.printStackTrace();

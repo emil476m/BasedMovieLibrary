@@ -133,6 +133,9 @@ public class MovieModel {
     public void deleteMovie(Movie movie) throws Exception {
         movieManager.deleteMovie(movie);
 
+        // Deletes the relations of the movie.
+        catMovieManager.deleteWhereMovie(movie);
+
         movieObservableList.remove(movie);
     }
 }
