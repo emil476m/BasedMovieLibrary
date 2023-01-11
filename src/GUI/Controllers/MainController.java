@@ -280,10 +280,11 @@ public class MainController extends BaseController {
         stage.setTitle("Add new movie");
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.show();
+
 
         DeleteMovieReminderController controller = loader.getController();
         controller.setModel(getModelsHandler());
         controller.setup();
+        stage.showAndWait();
     }
 }
