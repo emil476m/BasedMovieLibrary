@@ -3,6 +3,11 @@ package GUI.Controllers;
 import BE.Category;
 import GUI.Models.ModelsHandler;
 import GUI.Util.ExceptionHandler;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,15 +34,14 @@ public class CategoriesController extends BaseController {
     @FXML
     private TextField txtfieldNewCat;
 
-    public CategoriesController() {
-
-    }
-
     @Override
     public void setup() {
         tbvCat.setItems(getModelsHandler().getCategoryModel().getCategories());
 
         clmCat.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        setTbvCatChangeListener();
+        setTxtfieldNewCatChangeListener();
     }
 
     @FXML
@@ -75,5 +79,25 @@ public class CategoriesController extends BaseController {
 
     @FXML
     private void handleCancel(ActionEvent actionEvent) {
+    }
+
+    /**
+     * Disables/enables the remove category button
+     * if no category has been selected.
+     */
+    private void setTbvCatChangeListener() {
+        tbvCat.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            btnRemoveCat.setDisable(newValue == null);
+        });
+    }
+
+    /**
+     * Disables/enables the add category button
+     * if the new category text field is empty.
+     */
+    private void setTxtfieldNewCatChangeListener() {
+        txtfieldNewCat.textProperty().addListener((observable, oldValue, newValue) -> {
+            btnAddCat.setDisable(newValue.isEmpty());
+        });
     }
 }

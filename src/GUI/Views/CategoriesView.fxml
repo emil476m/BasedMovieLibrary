@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="367.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.CategoriesController">
    <children>
       <GridPane layoutX="21.0" layoutY="39.0" prefHeight="336.0" prefWidth="300.0" AnchorPane.leftAnchor="20.5" AnchorPane.rightAnchor="20.0">
@@ -38,8 +37,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnAddCat" mnemonicParsing="false" onAction="#handleAddCat" text="Add" />
-                  <Button fx:id="btnRemoveCat" mnemonicParsing="false" onAction="#handleRemoveCat" prefHeight="25.0" prefWidth="61.0" text="Remove" GridPane.columnIndex="1" />
+                  <Button fx:id="btnAddCat" disable="true" mnemonicParsing="false" onAction="#handleAddCat" text="Add" />
+                  <Button fx:id="btnRemoveCat" disable="true" mnemonicParsing="false" onAction="#handleRemoveCat" prefHeight="25.0" prefWidth="61.0" text="Remove" GridPane.columnIndex="1" />
                   <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" prefHeight="25.0" prefWidth="72.0" text="Cancel" GridPane.columnIndex="2">
                      <GridPane.margin>
                         <Insets />

@@ -3,7 +3,6 @@ package GUI.Controllers;
 import BE.Category;
 import BE.Movie;
 import GUI.Util.ExceptionHandler;
-import GUI.Util.TextLimiter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,16 +10,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CreateMovieController extends BaseController {
@@ -71,14 +64,16 @@ public class CreateMovieController extends BaseController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Add your song");
 
-        FileChooser.ExtensionFilter videoExtensions = new FileChooser.ExtensionFilter("Video files", "*.mp4");
+        FileChooser.ExtensionFilter videoExtensions = new FileChooser.ExtensionFilter("Video files", "*.mp4", "*.mpeg4");
 
         fileChooser.getExtensionFilters().add(videoExtensions);
 
         file = fileChooser.showOpenDialog((Stage) btnCancel.getScene().getWindow());
 
         if(file != null) {
-            txtfieldFilepath.setText(file.getAbsolutePath());
+            String fileUriString = file.toURI().toString();
+
+            if ((fileUriString.endsWith(".mp4") || fileUriString.endsWith(".mpeg4"))) txtfieldFilepath.setText(file.getAbsolutePath());
         }
     }
 
@@ -87,6 +82,7 @@ public class CreateMovieController extends BaseController {
         if (isInputMissing()) {
             return;
         }
+
         String title = txtfieldTitle.getText();
         Double rating = Double.parseDouble(txtfieldIMDBRating.getText());
         String path = txtfieldFilepath.getText();
@@ -100,15 +96,6 @@ public class CreateMovieController extends BaseController {
         } catch (Exception e) {
             ExceptionHandler.displayError(e);
         }
-
-
-    }
-
-    private void setTextLimit(){
-        TextLimiter textLimiter = new TextLimiter();
-        String IMDBPattern = ".{0,4}|\\d+\\,\\d*";
-        String IMDBPatterV2 = ".{0,4}";
-        textLimiter.textLimit(txtfieldIMDBRating, IMDBPatterV2);
     }
 
     @FXML
@@ -132,7 +119,6 @@ public class CreateMovieController extends BaseController {
         addRatingListener();
         addAllCategorySelectionListener();
         addMovieCategorySelectionListener();
-        setTextLimit();
     }
 
     private void showCategories(){
