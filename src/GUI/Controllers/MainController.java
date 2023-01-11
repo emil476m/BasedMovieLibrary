@@ -6,6 +6,8 @@ import GUI.Models.MovieModel;
 import GUI.Util.ExceptionHandler;
 import GUI.Models.ModelsHandler;
 import GUI.Util.ModalOpener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +23,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.StringConverter;
 
 import java.awt.*;
 import java.io.File;
@@ -32,6 +35,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class MainController extends BaseController {
     public Button btnIMDB;
@@ -62,12 +67,6 @@ public class MainController extends BaseController {
 
     private Movie selectedMovie;
     private File directory;
-
-    public MainController() {
-
-    }
-
-
 
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
@@ -158,6 +157,8 @@ public class MainController extends BaseController {
     @Override
     public void setup() {
         initializeMovies();
+
+        setTbvMoviesChangeListener();
     }
 
     /**
@@ -174,21 +175,24 @@ public class MainController extends BaseController {
     @FXML
     private void handleEditPRating(ActionEvent actionEvent) {
         Movie movie = tbvMovies.getSelectionModel().getSelectedItem();
-        TextInputDialog dialog = new TextInputDialog("" + movie.getPRating());
-        dialog.setTitle("Edit Personal Rating");
-        dialog.setHeaderText("Rate movie: " + movie.getTitle());
-        dialog.setContentText("What would you rate the movie?");
 
-// Traditional way to get the response value.
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            //TODO make a check for int with alert box
-            Double rating = Double.parseDouble(result.get());
-            try {
-                getModelsHandler().getMovieModel().editPRating(movie, rating);
-                tbvMovies.refresh();
-            } catch (Exception e) {
-                ExceptionHandler.displayError(e);
+        if (movie != null) {
+            TextInputDialog dialog = new TextInputDialog("" + movie.getPRating());
+            dialog.setTitle("Edit Personal Rating");
+            dialog.setHeaderText("Rate movie: " + movie.getTitle());
+            dialog.setContentText("What would you rate the movie?");
+
+            // Traditional way to get the response value.
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()){
+                //TODO make a check for int with alert box
+                Double rating = Double.parseDouble(result.get());
+                try {
+                    getModelsHandler().getMovieModel().editPRating(movie, rating);
+                    tbvMovies.refresh();
+                } catch (Exception e) {
+                    ExceptionHandler.displayError(e);
+                }
             }
         }
     }
@@ -204,10 +208,11 @@ public class MainController extends BaseController {
      * @param actionEvent
      */
     public void handleShowIMDB(ActionEvent actionEvent) {
-        try{
+        selectedMovie = tbvMovies.getSelectionModel().getSelectedItem();
+
+        if (selectedMovie != null) {
             Desktop desktop = Desktop.getDesktop();
             String link = "http://www.imdb.com/find?s=tt&q=";
-            selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
             String title = selectedMovie.getTitle().replace(" ", "");
             if(desktop.isSupported(Desktop.Action.BROWSE))
             {
@@ -215,16 +220,27 @@ public class MainController extends BaseController {
                 {
                     desktop.browse(URI.create(link+title));
                 }
-                catch (Exception e)
+                catch (IOException e)
                 {
-                    ExceptionHandler.displayError(e);
+                    e.printStackTrace();
+                    ExceptionHandler.displayError(new Exception("Failed to open IMDB", e));
                 }
             }
         }
-        catch (Exception ex)
-        {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "you don't have a movie selected", ButtonType.CLOSE);
-            alert.showAndWait();
-        }
+    }
+
+    /**
+     * Disables/enables the remove movie button,
+     * the open IMDB button, and the edit personal rating button,
+     * if no movie has been selected.
+     */
+    private void setTbvMoviesChangeListener() {
+        tbvMovies.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            boolean disable = newValue == null;
+
+            btnRemoveMovie.setDisable(disable);
+            btnIMDB.setDisable(disable);
+            btnEditPRating.setDisable(disable);
+        });
     }
 }
