@@ -21,14 +21,12 @@ public class MovieModel {
     List<CatMovie> catMovieList;
     private ObservableList<Movie> movieObservableList;
 
-    private ObservableList<Category> categoryObservableList;
 
     public MovieModel() throws Exception {
         movieManager = new MovieManager();
         catMovieManager = new CatMovieManager();
         catMovieList = new ArrayList<>();
         movieObservableList = FXCollections.observableArrayList();
-        categoryObservableList = FXCollections.observableArrayList();
         getAllMovies();
         getAllCatMovies();
     }
@@ -99,17 +97,6 @@ public class MovieModel {
         }
 
         return searchResults;
-    }
-    public ObservableList<Category> getCategoryObservableList() {
-        return categoryObservableList;
-    }
-
-    public void addCatToCreateMovieView(Category category){
-        categoryObservableList.add(category);
-    }
-
-    public void  removeCatFromCreateMovie(Category category){
-        categoryObservableList.remove(category);
     }
 
     public void createMovie(Movie movie) throws Exception {

@@ -5,13 +5,12 @@ import BE.Movie;
 import GUI.Util.ExceptionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -28,10 +27,6 @@ public class CreateMovieController extends BaseController {
     @FXML
     private TableColumn<Category, String> clmAllMovieCats;
     @FXML
-    private TableView<Category> tbvMovieCats;
-    @FXML
-    private TableColumn<Category, String> clmMovieCats;
-    @FXML
     private Button btnCancel;
     @FXML
     private TextField txtfieldFilepath;
@@ -43,14 +38,7 @@ public class CreateMovieController extends BaseController {
     private Button btnFilepath;
     @FXML
     private Button btnCreateMovie;
-    @FXML
-    private Button btnAddCat;
-    @FXML
-    private Button btnRemoveCat;
 
-    private Category selectedAllCat;
-
-    private Category selectedMovieCat;
 
 
     private File file;
@@ -89,7 +77,7 @@ public class CreateMovieController extends BaseController {
         String title = txtfieldTitle.getText();
         Double rating = Double.parseDouble(txtfieldIMDBRating.getText());
         String path = txtfieldFilepath.getText();
-        List<Category> categoryList = getModelsHandler().getMovieModel().getCategoryObservableList();
+        List<Category> categoryList = tbvAllCatsForMovie.getSelectionModel().getSelectedItems();
 
         Movie movie = new Movie(rating, categoryList, path, title);
 
@@ -99,20 +87,6 @@ public class CreateMovieController extends BaseController {
         } catch (Exception e) {
             ExceptionHandler.displayError(e);
         }
-
-
-    }
-
-    @FXML
-    private void handleAddCat(ActionEvent actionEvent) {
-        getModelsHandler().getMovieModel().addCatToCreateMovieView(selectedAllCat);
-        tbvMovieCats.refresh();
-    }
-
-    @FXML
-    private void handleRemoveCat(ActionEvent actionEvent) {
-        getModelsHandler().getMovieModel().removeCatFromCreateMovie(selectedMovieCat);
-        tbvMovieCats.refresh();
     }
 
     @Override
@@ -122,22 +96,17 @@ public class CreateMovieController extends BaseController {
         showCategories();
         addFileListener();
         addRatingListener();
-        addAllCategorySelectionListener();
-        addMovieCategorySelectionListener();
+        multiSelect();
+        tbvAllCatsForMovie.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     private void showCategories(){
         tbvAllCatsForMovie.setItems(getModelsHandler().getCategoryModel().getCategories());
         clmAllMovieCats.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        tbvMovieCats.setItems(getModelsHandler().getMovieModel().getCategoryObservableList());
-        clmMovieCats.setCellValueFactory(new PropertyValueFactory<>("name"));
     }
 
     private void disableButtons(){
         btnCreateMovie.setDisable(true);
-        btnAddCat.setDisable(true);
-        btnRemoveCat.setDisable(true);
     }
 
     private void addTitleListener(){
@@ -203,28 +172,38 @@ public class CreateMovieController extends BaseController {
         return false;
     }
 
-    private void addAllCategorySelectionListener() {
-        tbvAllCatsForMovie.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                selectedAllCat = newValue;
-                btnAddCat.setDisable(false);
-            }
-            else {
-                selectedAllCat = null;
-                btnAddCat.setDisable(true);
-            }
-        });
-    }
 
-    private void addMovieCategorySelectionListener() {
-        tbvMovieCats.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                selectedMovieCat = newValue;
-                btnRemoveCat.setDisable(false);
+    private void multiSelect(){
+        tbvAllCatsForMovie.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
+            Node node = evt.getPickResult().getIntersectedNode();
+
+            // go up from the target node until a row is found or it's clear the
+            // target node wasn't a node.
+            while (node != null && node != tbvAllCatsForMovie && !(node instanceof TableRow)) {
+                node = node.getParent();
             }
-            else {
-                selectedMovieCat = null;
-                btnRemoveCat.setDisable(true);
+
+            // if is part of a row or the row,
+            // handle event instead of using standard handling
+            if (node instanceof TableRow) {
+                // prevent further handling
+                evt.consume();
+
+                TableRow row = (TableRow) node;
+                TableView tv = row.getTableView();
+
+                // focus the tableview
+                tv.requestFocus();
+
+                if (!row.isEmpty()) {
+                    // handle selection for non-empty nodes
+                    int index = row.getIndex();
+                    if (row.isSelected()) {
+                        tv.getSelectionModel().clearSelection(index);
+                    } else {
+                        tv.getSelectionModel().select(index);
+                    }
+                }
             }
         });
     }

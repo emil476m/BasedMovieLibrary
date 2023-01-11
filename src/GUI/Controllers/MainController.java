@@ -74,9 +74,6 @@ public class MainController extends BaseController {
 
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
-        //clears category tableview for createMovieController
-        getModelsHandler().getMovieModel().getCategoryObservableList().clear();
-
         //Load the new stage & view
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/CreateMovieView.fxml"));
         Parent root = null;
