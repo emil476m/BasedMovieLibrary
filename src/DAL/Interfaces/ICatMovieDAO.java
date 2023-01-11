@@ -4,6 +4,7 @@ import BE.CatMovie;
 import BE.Category;
 import BE.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ICatMovieDAO {
@@ -25,4 +26,6 @@ public interface ICatMovieDAO {
     void deleteWhereCat(Category category) throws Exception;
 
     void deleteWhereMovie(Movie movie) throws Exception;
+
+    void deleteWhereOldMovies(ArrayList<Movie> deleteOldMovies) throws Exception;
 }

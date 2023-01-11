@@ -2,6 +2,7 @@ package DAL.Interfaces;
 
 import BE.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IMovieDAO {
@@ -30,5 +31,14 @@ public interface IMovieDAO {
      */
     void editPRating(Movie movie) throws Exception;
 
+    /**
+     * returns a list of movie objects from the database that have not been opened in more than 17520 hours
+     * @return a list of movies that have not been opened in more than 17520 hours
+     * @throws Exception
+     */
     List<Movie> getAllOldMovies() throws Exception;
+
+    void deleteAllOldMovies(ArrayList<Movie> deleteAllOldMovies) throws Exception;
+
+    void updateLastViewed(Boolean open, Movie movie) throws Exception;
 }

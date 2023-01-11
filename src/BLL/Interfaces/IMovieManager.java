@@ -28,4 +28,6 @@ public interface IMovieManager {
      * @throws Exception if it fails to edit the database.
      */
     void editPRating(Movie movie) throws Exception;
+
+    void updateLastViewed(Boolean opened, Movie movie) throws Exception;
 }

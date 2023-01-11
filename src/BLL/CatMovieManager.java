@@ -7,6 +7,7 @@ import BLL.Interfaces.ICatMovieManager;
 import DAL.DB.CatMovieDAO_DB;
 import DAL.Interfaces.ICatMovieDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CatMovieManager implements ICatMovieManager {
@@ -54,5 +55,10 @@ public class CatMovieManager implements ICatMovieManager {
     @Override
     public void deleteWhereMovie(Movie movie) throws Exception {
         catMovieDAO.deleteWhereMovie(movie);
+    }
+
+    @Override
+    public void deleteWhereOldMoives(ArrayList<Movie> deleteOldMovies) throws Exception {
+        catMovieDAO.deleteWhereOldMovies(deleteOldMovies);
     }
 }

@@ -1,18 +1,15 @@
 package GUI.Controllers;
 
-import BE.Category;
 import BE.Movie;
-import GUI.Models.MovieModel;
+import GUI.Models.DeleteReminderModel;
 import GUI.Util.ConfirmOK;
 import GUI.Util.ExceptionHandler;
-import GUI.Models.ModelsHandler;
 import GUI.Util.ModalOpener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -23,20 +20,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.List;
 
 public class MainController extends BaseController {
     public Button btnIMDB;
@@ -162,8 +152,10 @@ public class MainController extends BaseController {
     }
 
     @Override
-    public void setup() {
+    public void setup()
+    {
         initializeMovies();
+        checkDate();
     }
 
     /**
@@ -256,11 +248,42 @@ public class MainController extends BaseController {
             if (desktop.isSupported(Desktop.Action.OPEN)) {
                 try {
                     desktop.open(directory.getAbsoluteFile());
+                    getModelsHandler().getMovieModel().updateLastViewed(selectedMovie);
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.WARNING, "the chosen movie's file does not exist", ButtonType.CLOSE);
                     alert.showAndWait();
                 }
             }
         }
+    }
+
+    private void checkDate() {
+
+        if (getModelsHandler().getDeleteReminderModel().isntEmpty())
+        {
+            openDeleteReminder();
+        }
+    }
+
+    private void openDeleteReminder()
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/DeleteMovieReminder.fxml"));
+        Parent root = null;
+
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            ExceptionHandler.displayError(new Exception("Failed to open movie creator", e));
+        }
+
+        Stage stage = new Stage();
+        stage.setTitle("Add new movie");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+
+        DeleteMovieReminderController controller = loader.getController();
+        controller.setModel(getModelsHandler());
+        controller.setup();
     }
 }

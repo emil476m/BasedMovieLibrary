@@ -50,4 +50,9 @@ public class MovieManager implements IMovieManager {
     public void editPRating(Movie movie) throws Exception{
         movieDAO.editPRating(movie);
     }
+
+    @Override
+    public void updateLastViewed(Boolean opened, Movie movie) throws Exception {
+        movieDAO.updateLastViewed(opened,movie);
+    }
 }

@@ -145,7 +145,7 @@ public class MovieDAO_DB implements IMovieDAO {
     }
 
     public List<Movie> getAllOldMovies() throws Exception {
-        ArrayList<Movie> allMovies = new ArrayList<>();
+        ArrayList<Movie> allOldMovies = new ArrayList<>();
 
         try(Connection connection = databaseConnector.getConnection();
             Statement statement = connection.createStatement()) {
@@ -168,13 +168,55 @@ public class MovieDAO_DB implements IMovieDAO {
 
                 Movie movie = new Movie(movieId, movieRating, filePath, title, moviePRating, date);
 
-                allMovies.add(movie);
+                allOldMovies.add(movie);
             }
 
-            return allMovies;
+            return allOldMovies;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new Exception("Failed to retrieve movies", e);
+            throw new Exception("Failed to retrieve old movies", e);
+        }
+    }
+
+    @Override
+    public void deleteAllOldMovies(ArrayList<Movie> deleteAllOldMovies) throws Exception {
+        String sql = "DELETE FROM Movie WHERE id= ?";
+        ArrayList<Movie> allOldMovies = (ArrayList<Movie>) deleteAllOldMovies;
+
+        try(Connection connection = databaseConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            for (Movie m: allOldMovies)
+            {
+                statement.setInt(1,m.getId());
+
+                statement.executeUpdate();
+
+                LocalFileHandler.deleteLocalFile(m.getFilePath());
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            throw new Exception("Failed to delete all old movies", ex);
+        }
+    }
+
+    @Override
+    public void updateLastViewed(Boolean open, Movie movie) throws Exception {
+        String sql = "UPDATE Movie SET LastView = GETDATE() WHERE Id = ?;";
+
+        try(Connection connection = databaseConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setInt(1, movie.getId());
+
+            statement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new Exception("Could not update lastView");
         }
     }
 }

@@ -138,4 +138,8 @@ public class MovieModel {
 
         movieObservableList.remove(movie);
     }
+
+    public void updateLastViewed(Movie movie) throws Exception {
+        movieManager.updateLastViewed(true, movie);
+    }
 }

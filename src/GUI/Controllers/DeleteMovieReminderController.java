@@ -5,13 +5,9 @@ import GUI.Util.ConfirmOK;
 import GUI.Util.ExceptionHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class DeleteMovieReminderController extends BaseController {
     @FXML
@@ -46,6 +42,7 @@ public class DeleteMovieReminderController extends BaseController {
     @FXML
     private void handleClose(ActionEvent event) {
         Stage stage = (Stage) CloseBtn.getScene().getWindow();
+        getModelsHandler().getDeleteReminderModel().ClearListOnClose();
         stage.close();
     }
 
@@ -67,6 +64,21 @@ public class DeleteMovieReminderController extends BaseController {
         catch (Exception ex)
         {
             Alert alert = new Alert(Alert.AlertType.WARNING, "You do not have a movie selected", ButtonType.CANCEL);
+            alert.showAndWait();
+        }
+    }
+
+    public void DeleteAllMovies(ActionEvent event) throws Exception {
+        try
+        {
+            if(ConfirmOK.confirm("Are you sure?", "Do you want to delete all movies on the list?"))
+            {
+                getModelsHandler().getDeleteReminderModel().deleteAllmovies();
+            }
+        }
+        catch (Exception e)
+        {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Something went wrong when trying to delete all movies from the list", ButtonType.CLOSE);
             alert.showAndWait();
         }
     }

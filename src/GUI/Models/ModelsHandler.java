@@ -41,5 +41,5 @@ public class ModelsHandler {
 
     public MovieModel getMovieModel() { return movieModel; }
 
-    public DeleteReminderModel getDeleteReminderModel() { return deleteReminderModel; }
+   public DeleteReminderModel getDeleteReminderModel() { return deleteReminderModel; }
 }

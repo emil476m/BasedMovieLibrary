@@ -128,4 +128,26 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
             throw new Exception("Failed to delete movie");
         }
     }
+
+    @Override
+    public void deleteWhereOldMovies(ArrayList<Movie> deleteOldMovies) throws Exception {
+        String sql = "DELETE FROM CatMovie WHERE id= ?";
+        ArrayList<Movie> allOldMovies = (ArrayList<Movie>) deleteOldMovies;
+
+        try(Connection connection = databaseConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            for (Movie m: allOldMovies)
+            {
+                statement.setInt(1,m.getId());
+
+                statement.executeUpdate();
+            }
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            throw new Exception("Failed to delete all old movies", ex);
+        }
+    }
 }

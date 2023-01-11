@@ -2,6 +2,7 @@ package BLL.Interfaces;
 
 import BE.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IDeleteReminderManager {
@@ -10,5 +11,5 @@ public interface IDeleteReminderManager {
 
     void deleteMovie(Movie movie) throws Exception;
 
-    void deleteAllMovies() throws Exception;
+    void deleteAllMovies(ArrayList<Movie> deleteAllMoveies) throws Exception;
 }
