@@ -39,23 +39,25 @@ public class CreateMovieController extends BaseController {
     @FXML
     private Button btnCreateMovie;
 
-
-
     private File file;
 
-    public CreateMovieController(){
-    }
-
+    /**
+     * closes the CreateMovieView.
+     */
     @FXML
     private void handleCancel() {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * helps the user get the filepath for their movie.
+     * @param actionEvent
+     */
     @FXML
     private void handleChooseFilepath(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Add your song");
+        fileChooser.setTitle("Add your movie");
 
         FileChooser.ExtensionFilter videoExtensions = new FileChooser.ExtensionFilter("Video files", "*.mp4");
 
@@ -68,6 +70,9 @@ public class CreateMovieController extends BaseController {
         }
     }
 
+    /**
+     * creates a movie object when clicked and sends it down.
+     */
     @FXML
     private void handleCreateMovie() {
         if (isInputMissing()) {
@@ -89,24 +94,27 @@ public class CreateMovieController extends BaseController {
         }
     }
 
+    /**
+     * initializes the class.
+     */
     @Override
     public void setup() {
-        disableButtons();
+        setupCreateMovie();
         addTitleListener();
-        showCategories();
-        addFileListener();
-        addRatingListener();
         multiSelect();
-        tbvAllCatsForMovie.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
-    private void showCategories(){
+    /**
+     * shows categories, enables multiselect and disables buttons on startup.
+     */
+    private void setupCreateMovie(){
+        btnCreateMovie.setDisable(true);
+        //enables multiselect for the tableview.
+        tbvAllCatsForMovie.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        //shows categories in tableview.
         tbvAllCatsForMovie.setItems(getModelsHandler().getCategoryModel().getCategories());
         clmAllMovieCats.setCellValueFactory(new PropertyValueFactory<>("name"));
-    }
-
-    private void disableButtons(){
-        btnCreateMovie.setDisable(true);
     }
 
     private void addTitleListener(){
@@ -120,40 +128,34 @@ public class CreateMovieController extends BaseController {
         });
     }
 
-    private void addRatingListener(){
-        txtfieldIMDBRating.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (isFileEmpty()) {
-                btnCreateMovie.setDisable(true);
-            }
-            else if (!isTitleEmpty() && !isRatingEmpty()) {
-                btnCreateMovie.setDisable(false);
-            }
-        });
-    }
-
-    private void addFileListener(){
-        txtfieldFilepath.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (isFileEmpty()) {
-                btnCreateMovie.setDisable(true);
-            }
-            else if (!isTitleEmpty() && !isRatingEmpty()) {
-                btnCreateMovie.setDisable(false);
-            }
-        });
-    }
-
+    /**
+     * checks if title is empty or null.
+     * @return boolean
+     */
     private boolean isTitleEmpty() {
         return txtfieldTitle.getText() == null || txtfieldTitle.getText().trim().isEmpty();
     }
 
+    /**
+     * checks if filepath is empty og null.
+     * @return boolean
+     */
     private boolean isFileEmpty() {
         return txtfieldFilepath.getText() == null || txtfieldFilepath.getText().trim().isEmpty();
     }
 
+    /**
+     * checks if rating is empty or null.
+     * @return boolean
+     */
     private boolean isRatingEmpty() {
         return txtfieldIMDBRating.getText() == null || txtfieldIMDBRating.getText().trim().isEmpty();
     }
 
+    /**
+     * checks if there are the necessary inputs to create a movie.
+     * @return true or false
+     */
     private boolean isInputMissing() {
         if (isFileEmpty()) {
             ExceptionHandler.displayError(new Exception("No movie file is chosen"));
@@ -172,7 +174,9 @@ public class CreateMovieController extends BaseController {
         return false;
     }
 
-
+    /**
+     * makes the tableview able to multiselect without holding control, by using node instances and mouseevents.
+     */
     private void multiSelect(){
         tbvAllCatsForMovie.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
             Node node = evt.getPickResult().getIntersectedNode();
