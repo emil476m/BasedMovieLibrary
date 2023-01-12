@@ -20,8 +20,8 @@ public class MovieModel {
     ICatMovieManager catMovieManager;
     List<CatMovie> catMovieList;
     private ObservableList<Movie> movieObservableList;
-
     private ObservableList<Category> categoryObservableList;
+    private ObservableList<Movie> moviesToDelete;
 
     public MovieModel() throws Exception {
         movieManager = new MovieManager();
@@ -29,8 +29,10 @@ public class MovieModel {
         catMovieList = new ArrayList<>();
         movieObservableList = FXCollections.observableArrayList();
         categoryObservableList = FXCollections.observableArrayList();
+        moviesToDelete = FXCollections.observableArrayList();
         getAllMovies();
         getAllCatMovies();
+        getAllMoviesToDelete();
     }
 
     /**
@@ -53,6 +55,10 @@ public class MovieModel {
         });
     }
 
+    private void getAllMoviesToDelete() throws Exception {
+        moviesToDelete.addAll(movieManager.getAllOldMovies());
+    }
+
     private void getAllCatMovies() throws Exception {
         catMovieList.addAll(catMovieManager.getAllCatMovies());
     }
@@ -67,6 +73,8 @@ public class MovieModel {
     public ObservableList<Movie> getMovieObservableList() {
         return movieObservableList;
     }
+
+    public ObservableList<Movie> getMoviesToDeleteObservableList() { return moviesToDelete; }
 
     public Movie getMovieFromID(int id){
         for (Movie m:movieObservableList) {
@@ -125,6 +133,17 @@ public class MovieModel {
     }
 
     /**
+     * Deletes and removes a movie from the movies to delete list,
+     * @param movie The movie to delete.
+     * @throws Exception If it fails to delete the movie.
+     */
+    public void deleteMovieToDelete(Movie movie) throws Exception {
+        deleteMovie(movie);
+
+        moviesToDelete.remove(movie);
+    }
+
+    /**
      * Instructs the movie manager to delete a movie,
      * and then removes the same movie from the list.
      * @param movie The movie to delete.
@@ -139,7 +158,20 @@ public class MovieModel {
         movieObservableList.remove(movie);
     }
 
+    /**
+     * Deletes all the movies that were set for deletion.
+     * @throws Exception If it fails to delete the movies.
+     */
+    public void deleteAllMoviesToDelete() throws Exception {
+        movieManager.deleteAllMovies(moviesToDelete);
+
+        catMovieManager.deleteWhereOldMoives(moviesToDelete);
+
+        movieObservableList.removeAll(moviesToDelete);
+        moviesToDelete.clear();
+    }
+
     public void updateLastViewed(Movie movie) throws Exception {
-        movieManager.updateLastViewed(true, movie);
+        movieManager.updateLastViewed(movie);
     }
 }

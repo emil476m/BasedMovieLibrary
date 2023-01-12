@@ -3,6 +3,8 @@ package GUI.Controllers;
 import BE.Movie;
 import GUI.Util.ConfirmOK;
 import GUI.Util.ExceptionHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,17 +15,17 @@ public class DeleteMovieReminderController extends BaseController {
     @FXML
     private Button CloseBtn;
     @FXML
-    private TableView TbvDMovies;
+    private Button DeleteBtn;
     @FXML
-    private TableColumn ColMovieTitle;
+    private TableView<Movie> TbvDMovies;
     @FXML
-    private TableColumn ColMovieCategory;
+    private TableColumn<Movie, String> ColMovieTitle;
     @FXML
-    private TableColumn ColImdb;
+    private TableColumn<Movie, String> ColMovieCategory;
     @FXML
-    private TableColumn ColMyRating;
-
-    private Movie selectedMovie;
+    private TableColumn<Movie, Double> ColImdb;
+    @FXML
+    private TableColumn<Movie, Double> ColMyRating;
 
     @Override
     public void setup() {
@@ -32,28 +34,30 @@ public class DeleteMovieReminderController extends BaseController {
 
     private void initializeMoviesToDelete()
     {
-        TbvDMovies.setItems(getModelsHandler().getDeleteReminderModel().getMoviesToDelete());
+        TbvDMovies.setItems(getModelsHandler().getMovieModel().getMoviesToDeleteObservableList());
         ColMovieTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         ColMovieCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryNames"));
         ColImdb.setCellValueFactory(new PropertyValueFactory<>("Rating"));
         ColMyRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
+
+        setTbvDMoviesChangeListener();
     }
 
     @FXML
     private void handleClose(ActionEvent event) {
         Stage stage = (Stage) CloseBtn.getScene().getWindow();
-        getModelsHandler().getDeleteReminderModel().ClearListOnClose();
         stage.close();
     }
 
     @FXML
     private void DeleteMovie(ActionEvent event) {
-        try {
-            selectedMovie = (Movie) TbvDMovies.getSelectionModel().getSelectedItem();
+        Movie selectedMovie = TbvDMovies.getSelectionModel().getSelectedItem();
+
+        if (selectedMovie != null) {
             try {
-                if( ConfirmOK.confirm("Are you sure?", "Do you want to delete the movie"))
+                if(ConfirmOK.confirm("Are you sure?", "Do you want to delete the movie"))
                 {
-                    getModelsHandler().getDeleteReminderModel().deleteMovie(selectedMovie);
+                    getModelsHandler().getMovieModel().deleteMovieToDelete(selectedMovie);
                 }
             }
             catch (Exception e)
@@ -61,25 +65,31 @@ public class DeleteMovieReminderController extends BaseController {
                 ExceptionHandler.displayError(e);
             }
         }
-        catch (Exception ex)
-        {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "You do not have a movie selected", ButtonType.CANCEL);
-            alert.showAndWait();
-        }
     }
 
-    public void DeleteAllMovies(ActionEvent event) throws Exception {
+    public void DeleteAllMovies(ActionEvent event) {
         try
         {
             if(ConfirmOK.confirm("Are you sure?", "Do you want to delete all movies on the list?"))
             {
-                getModelsHandler().getDeleteReminderModel().deleteAllmovies();
+                getModelsHandler().getMovieModel().deleteAllMoviesToDelete();
+
+                handleClose(new ActionEvent());
             }
         }
         catch (Exception e)
         {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Something went wrong when trying to delete all movies from the list", ButtonType.CLOSE);
-            alert.showAndWait();
+            ExceptionHandler.displayError(e);
         }
+    }
+
+    /**
+     * Disables/enables the movie delete button,
+     * if no movie has been selected.
+     */
+    private void setTbvDMoviesChangeListener() {
+        TbvDMovies.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            DeleteBtn.setDisable(newValue == null);
+        });
     }
 }

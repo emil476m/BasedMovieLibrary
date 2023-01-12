@@ -63,7 +63,7 @@ public class CatMovieManager implements ICatMovieManager {
      * @throws Exception
      */
     @Override
-    public void deleteWhereOldMoives(ArrayList<Movie> deleteOldMovies) throws Exception {
+    public void deleteWhereOldMoives(List<Movie> deleteOldMovies) throws Exception {
         catMovieDAO.deleteWhereOldMovies(deleteOldMovies);
     }
 }

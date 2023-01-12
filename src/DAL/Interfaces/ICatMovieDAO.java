@@ -32,5 +32,5 @@ public interface ICatMovieDAO {
      * @param deleteOldMovies a list of movie objects
      * @throws Exception
      */
-    void deleteWhereOldMovies(ArrayList<Movie> deleteOldMovies) throws Exception;
+    void deleteWhereOldMovies(List<Movie> deleteOldMovies) throws Exception;
 }
