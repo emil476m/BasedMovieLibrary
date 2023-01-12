@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="578.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.CreateMovieController">
+<AnchorPane prefHeight="578.0" prefWidth="462.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.CreateMovieController" styleClass="background" stylesheets="@../Css/Style.Css">
    <children>
       <HBox layoutY="226.0" prefHeight="315.0" prefWidth="461.0">
          <children>

@@ -286,7 +286,7 @@ public class MainController extends BaseController {
         }
 
         Stage stage = new Stage();
-        stage.setTitle("Add new movie");
+        stage.setTitle("Delete reminder");
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
 

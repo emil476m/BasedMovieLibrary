@@ -1,0 +1,66 @@
+.root {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-radius: 10;
+}
+
+.background
+{
+    -fx-background-color: radial-gradient(radius 180%, darkgray, black);
+}
+
+.backgroundTbv
+{
+    -fx-background-color: transparent;
+}
+
+.label
+{
+    -fx-text-fill: #3D3B3BFF;
+}
+
+.button
+{
+    -fx-background-color: radial-gradient(radius 69%, rgba(65, 105, 225), dimgray);
+    -fx-text-fill: white;
+}
+
+
+.table-view .column-header, .table-view .filler{
+    -fx-background-color: radial-gradient(radius 69%, rgba(65, 105, 225), dimgray);;
+    -fx-border-color: transparent;
+    -fx-text-fill: black;
+}
+
+.table-view .corner, .list-view .corner {
+    -fx-background-color: transparent;
+}
+
+.table-view .list-view{
+    -fx-background-color: Transparent;
+    -fx-control-inner-background: transparent;
+}
+
+.table-view .table-cell{
+    -fx-border-color: transparent;
+    -fx-padding: 0 0 0 00px;
+    -fx-background-color: rgba(49, 49, 49, 0.5);
+    -fx-text-fill: white;
+}
+.table-row-cell:hover {
+    -fx-background-color: royalblue;
+    -fx-text-fill: #3D3B3BFF;
+}
+.table-row-cell:selected {
+    -fx-background-color: radial-gradient(radius 69%, rgba(65, 105, 225), dimgray);
+    -fx-text-fill: white;
+}
+.table-view .label {
+    -fx-text-fill: white;
+}
+
+.text-field
+{
+    -fx-background-color: rgba(49, 49, 49, 0.5);
+    -fx-text-fill: white;
+}

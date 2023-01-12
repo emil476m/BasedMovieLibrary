@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="367.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.CategoriesController">
+<AnchorPane prefHeight="400.0" prefWidth="367.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.CategoriesController" styleClass="background" stylesheets="@../Css/Style.Css">
    <children>
       <GridPane layoutX="21.0" layoutY="39.0" prefHeight="336.0" prefWidth="300.0" AnchorPane.leftAnchor="20.5" AnchorPane.rightAnchor="20.0">
         <columnConstraints>
@@ -23,9 +23,9 @@
           <RowConstraints maxHeight="137.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TableView fx:id="tbvCat" prefHeight="200.0" prefWidth="200.0">
+            <TableView fx:id="tbvCat" prefHeight="200.0" prefWidth="200.0" styleClass="backgroundTbv">
               <columns>
-                <TableColumn fx:id="clmCat" prefWidth="325.0" text="Categories" />
+                <TableColumn fx:id="clmCat" prefWidth="325.0" text="Categories"/>
               </columns>
             </TableView>
             <GridPane GridPane.rowIndex="2">
