@@ -2,7 +2,10 @@ package GUI.Controllers;
 
 import BE.Category;
 import BE.Movie;
+import GUI.Util.AlertOpener;
 import GUI.Util.ExceptionHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -58,6 +61,13 @@ public class CreateMovieController extends BaseController {
         stage.close();
     }
 
+    private final ChangeListener<String> fieldChangeListener = new ChangeListener<>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            btnCreateMovie.setDisable(isFileEmpty() || isTitleEmpty() || isRatingEmpty());
+        }
+    };
+
     @FXML
     private void handleChooseFilepath(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
@@ -83,7 +93,8 @@ public class CreateMovieController extends BaseController {
         }
 
         String title = txtfieldTitle.getText();
-        Double rating = Double.parseDouble(txtfieldIMDBRating.getText());
+        String[] splitRating = txtfieldIMDBRating.getText().split("\\.");
+        Double rating = Double.parseDouble(splitRating[0] + "." + splitRating[1].charAt(0));
         String path = txtfieldFilepath.getText();
         List<Category> categoryList = getModelsHandler().getMovieModel().getCategoryObservableList();
 
@@ -135,36 +146,15 @@ public class CreateMovieController extends BaseController {
     }
 
     private void addTitleListener(){
-        txtfieldTitle.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (isFileEmpty()) {
-                btnCreateMovie.setDisable(true);
-            }
-            else if (!isTitleEmpty() && !isRatingEmpty()) {
-                btnCreateMovie.setDisable(false);
-            }
-        });
+        txtfieldTitle.textProperty().addListener(fieldChangeListener);
     }
 
     private void addRatingListener(){
-        txtfieldIMDBRating.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (isFileEmpty()) {
-                btnCreateMovie.setDisable(true);
-            }
-            else if (!isTitleEmpty() && !isRatingEmpty()) {
-                btnCreateMovie.setDisable(false);
-            }
-        });
+        txtfieldIMDBRating.textProperty().addListener(fieldChangeListener);
     }
 
     private void addFileListener(){
-        txtfieldFilepath.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (isFileEmpty()) {
-                btnCreateMovie.setDisable(true);
-            }
-            else if (!isTitleEmpty() && !isRatingEmpty()) {
-                btnCreateMovie.setDisable(false);
-            }
-        });
+        txtfieldFilepath.textProperty().addListener(fieldChangeListener);
     }
 
     private boolean isTitleEmpty() {
@@ -181,17 +171,22 @@ public class CreateMovieController extends BaseController {
 
     private boolean isInputMissing() {
         if (isFileEmpty()) {
-            ExceptionHandler.displayError(new Exception("No movie file is chosen"));
+            AlertOpener.validationError("No movie file is chosen");
             return true;
         }
 
         if (isRatingEmpty()) {
-            ExceptionHandler.displayError(new Exception("IMDB rating can not be empty"));
+            AlertOpener.validationError("IMDB rating can not be empty");
+            return true;
+        }
+        else if (!isRatingInputValid(txtfieldIMDBRating.getText())) {
+            txtfieldIMDBRating.setText("");
+            AlertOpener.validationError("IMDB rating must be between 0.0 and 10.0");
             return true;
         }
 
         if (isTitleEmpty()) {
-            ExceptionHandler.displayError(new Exception("Title can not be empty"));
+            AlertOpener.validationError("Title can not be empty");
             return true;
         }
         return false;

@@ -3,6 +3,7 @@ package GUI.Controllers;
 import BE.Category;
 import BE.Movie;
 import GUI.Models.MovieModel;
+import GUI.Util.AlertOpener;
 import GUI.Util.ExceptionHandler;
 import GUI.Models.ModelsHandler;
 import GUI.Util.ModalOpener;
@@ -184,14 +185,24 @@ public class MainController extends BaseController {
 
             // Traditional way to get the response value.
             Optional<String> result = dialog.showAndWait();
+
             if (result.isPresent()){
-                //TODO make a check for int with alert box
-                Double rating = Double.parseDouble(result.get());
-                try {
-                    getModelsHandler().getMovieModel().editPRating(movie, rating);
-                    tbvMovies.refresh();
-                } catch (Exception e) {
-                    ExceptionHandler.displayError(e);
+                if (!isRatingInputValid(dialog.getEditor().getText())) {
+                    dialog.getEditor().setText("");
+                    AlertOpener.validationError("Personal rating must be between 0.0 and 10.0");
+
+                    // Opens the dialog again if the personal rating was invalid.
+                    handleEditPRating(new ActionEvent());
+                }
+                else {
+                    double rating = Double.parseDouble(result.get());
+
+                    try {
+                        getModelsHandler().getMovieModel().editPRating(movie, rating);
+                        tbvMovies.refresh();
+                    } catch (Exception e) {
+                        ExceptionHandler.displayError(e);
+                    }
                 }
             }
         }

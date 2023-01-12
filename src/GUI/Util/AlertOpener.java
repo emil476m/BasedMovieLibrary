@@ -1,13 +1,12 @@
 package GUI.Util;
 
-import GUI.Controllers.MainController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.StageStyle;
 
 import java.util.Optional;
 
-public class ConfirmOK {
+public class AlertOpener {
     /**
      * Opens a modal to confirm that the user wants to delete something.
      * @param header The header text to display.
@@ -18,7 +17,6 @@ public class ConfirmOK {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         //alert.getDialogPane().getStylesheets().removeAll();
         //alert.getDialogPane().getStylesheets().add(MainController.currentStyle);
-        alert.initStyle(StageStyle.UNDECORATED);
         alert.setTitle("Confirm Delete");
         alert.setHeaderText(header);
         alert.setContentText(content);
@@ -26,5 +24,17 @@ public class ConfirmOK {
         Optional<ButtonType> result = alert.showAndWait();
 
         return result.get() == ButtonType.OK;
+    }
+
+    /**
+     * Opens a modal to display a validation error.
+     * @param text The text that displays what input was invalid.
+     */
+    public static void validationError(String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Invalid Input");
+        alert.setHeaderText(text);
+
+        alert.showAndWait();
     }
 }
