@@ -4,6 +4,7 @@ import BE.Category;
 import BE.Movie;
 import GUI.Models.MovieModel;
 import GUI.Util.AlertOpener;
+import GUI.Util.ConfirmOK;
 import GUI.Util.ExceptionHandler;
 import GUI.Models.ModelsHandler;
 import GUI.Util.ModalOpener;
@@ -21,6 +22,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -69,11 +72,12 @@ public class MainController extends BaseController {
     private Movie selectedMovie;
     private File directory;
 
+    /**
+     * opens the view where we can add a movie.
+     * @param actionEvent
+     */
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
-        //clears category tableview for createMovieController
-        getModelsHandler().getMovieModel().getCategoryObservableList().clear();
-
         //Load the new stage & view
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/CreateMovieView.fxml"));
         Parent root = null;
@@ -110,7 +114,8 @@ public class MainController extends BaseController {
     private void handleRemoveMovie(ActionEvent actionEvent) {
         Movie selectedMovie = tbvMovies.getSelectionModel().getSelectedItem();
 
-        if (selectedMovie != null) {
+        if (selectedMovie != null && ConfirmOK.confirm("Remove movie?",
+                "Are you sure you want to remove " + selectedMovie.getTitle() + "?")) {
             try {
                 getModelsHandler().getMovieModel().deleteMovie(selectedMovie);
             }
@@ -138,7 +143,7 @@ public class MainController extends BaseController {
 
     @FXML
     private void onClearSearch(ActionEvent actionEvent) {
-        if (!txtfieldSearch.getText().isEmpty()) {
+        if (txtfieldSearch.getText() != null) {
             txtfieldSearch.setText("");
             search("");
         }
@@ -158,7 +163,6 @@ public class MainController extends BaseController {
     @Override
     public void setup() {
         initializeMovies();
-
         setTbvMoviesChangeListener();
     }
 
@@ -173,6 +177,10 @@ public class MainController extends BaseController {
         clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
 
+    /**
+     * Opens an Input alert box where you can write your personal rating.
+     * @param actionEvent
+     */
     @FXML
     private void handleEditPRating(ActionEvent actionEvent) {
         Movie movie = tbvMovies.getSelectionModel().getSelectedItem();
@@ -208,6 +216,10 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * closes the program, when you press the close button.
+     * @param actionEvent
+     */
     @FXML
     private void handleClose(ActionEvent actionEvent) {
         Stage stage = (Stage) btnClose.getScene().getWindow();
@@ -253,5 +265,35 @@ public class MainController extends BaseController {
             btnIMDB.setDisable(disable);
             btnEditPRating.setDisable(disable);
         });
+    }
+
+    /**
+     * plays the selected movie on a double click
+     * @param mouseEvent
+     */
+    @FXML
+    private void playMovie(MouseEvent mouseEvent)
+    {
+        if(mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == 2)
+        {
+            openMediaPlayer();
+        }
+    }
+
+    private void openMediaPlayer()
+    {
+        selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
+        if (selectedMovie != null) {
+            directory = new File(selectedMovie.getFilePath());
+            Desktop desktop = Desktop.getDesktop();
+            if (desktop.isSupported(Desktop.Action.OPEN)) {
+                try {
+                    desktop.open(directory.getAbsoluteFile());
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING, "the chosen movie's file does not exist", ButtonType.CLOSE);
+                    alert.showAndWait();
+                }
+            }
+        }
     }
 }

@@ -107,4 +107,25 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
             throw new Exception("Failed to delete category", e);
         }
     }
+
+    @Override
+    public void deleteWhereMovie(Movie movie) throws Exception {
+        String sql = "DELETE FROM CatMovie WHERE MovieId = ?";
+
+        try (Connection connection = databaseConnector.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, movie.getId());
+
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            /*
+            Implicit coupling? We're doing this because we don't
+            think there are any scenarios where this method would be called,
+            without the user trying to delete a movie.
+            */
+            throw new Exception("Failed to delete movie");
+        }
+    }
 }

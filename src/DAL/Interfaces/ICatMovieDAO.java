@@ -23,4 +23,6 @@ public interface ICatMovieDAO {
     void createMovies(Movie movie) throws Exception;
 
     void deleteWhereCat(Category category) throws Exception;
+
+    void deleteWhereMovie(Movie movie) throws Exception;
 }

@@ -8,8 +8,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -24,10 +30,6 @@ public class CreateMovieController extends BaseController {
     @FXML
     private TableColumn<Category, String> clmAllMovieCats;
     @FXML
-    private TableView<Category> tbvMovieCats;
-    @FXML
-    private TableColumn<Category, String> clmMovieCats;
-    @FXML
     private Button btnCancel;
     @FXML
     private TextField txtfieldFilepath;
@@ -39,22 +41,12 @@ public class CreateMovieController extends BaseController {
     private Button btnFilepath;
     @FXML
     private Button btnCreateMovie;
-    @FXML
-    private Button btnAddCat;
-    @FXML
-    private Button btnRemoveCat;
-
-    private Category selectedAllCat;
-
-    private Category selectedMovieCat;
-
 
     private File file;
 
-    public CreateMovieController(){
-
-    }
-
+    /**
+     * closes the CreateMovieView.
+     */
     @FXML
     private void handleCancel() {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
@@ -68,10 +60,14 @@ public class CreateMovieController extends BaseController {
         }
     };
 
+    /**
+     * helps the user get the filepath for their movie.
+     * @param actionEvent
+     */
     @FXML
     private void handleChooseFilepath(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Add your song");
+        fileChooser.setTitle("Add your movie");
 
         FileChooser.ExtensionFilter videoExtensions = new FileChooser.ExtensionFilter("Video files", "*.mp4", "*.mpeg4");
 
@@ -86,6 +82,9 @@ public class CreateMovieController extends BaseController {
         }
     }
 
+    /**
+     * creates a movie object when clicked and sends it down.
+     */
     @FXML
     private void handleCreateMovie() {
         if (isInputMissing()) {
@@ -96,7 +95,7 @@ public class CreateMovieController extends BaseController {
         String[] splitRating = txtfieldIMDBRating.getText().split("\\.");
         Double rating = Double.parseDouble(splitRating[0] + "." + splitRating[1].charAt(0));
         String path = txtfieldFilepath.getText();
-        List<Category> categoryList = getModelsHandler().getMovieModel().getCategoryObservableList();
+        List<Category> categoryList = tbvAllCatsForMovie.getSelectionModel().getSelectedItems();
 
         Movie movie = new Movie(rating, categoryList, path, title);
 
@@ -108,41 +107,27 @@ public class CreateMovieController extends BaseController {
         }
     }
 
-    @FXML
-    private void handleAddCat(ActionEvent actionEvent) {
-        getModelsHandler().getMovieModel().addCatToCreateMovieView(selectedAllCat);
-        tbvMovieCats.refresh();
-    }
-
-    @FXML
-    private void handleRemoveCat(ActionEvent actionEvent) {
-        getModelsHandler().getMovieModel().removeCatFromCreateMovie(selectedMovieCat);
-        tbvMovieCats.refresh();
-    }
-
+    /**
+     * initializes the class.
+     */
     @Override
     public void setup() {
-        disableButtons();
+        setupCreateMovie();
         addTitleListener();
-        showCategories();
-        addFileListener();
-        addRatingListener();
-        addAllCategorySelectionListener();
-        addMovieCategorySelectionListener();
+        multiSelect();
     }
 
-    private void showCategories(){
+    /**
+     * shows categories, enables multiselect and disables buttons on startup.
+     */
+    private void setupCreateMovie(){
+        btnCreateMovie.setDisable(true);
+        //enables multiselect for the tableview.
+        tbvAllCatsForMovie.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        //shows categories in tableview.
         tbvAllCatsForMovie.setItems(getModelsHandler().getCategoryModel().getCategories());
         clmAllMovieCats.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        tbvMovieCats.setItems(getModelsHandler().getMovieModel().getCategoryObservableList());
-        clmMovieCats.setCellValueFactory(new PropertyValueFactory<>("name"));
-    }
-
-    private void disableButtons(){
-        btnCreateMovie.setDisable(true);
-        btnAddCat.setDisable(true);
-        btnRemoveCat.setDisable(true);
     }
 
     private void addTitleListener(){
@@ -157,18 +142,34 @@ public class CreateMovieController extends BaseController {
         txtfieldFilepath.textProperty().addListener(fieldChangeListener);
     }
 
+    /**
+     * checks if title is empty or null.
+     * @return boolean
+     */
     private boolean isTitleEmpty() {
         return txtfieldTitle.getText() == null || txtfieldTitle.getText().trim().isEmpty();
     }
 
+    /**
+     * checks if filepath is empty og null.
+     * @return boolean
+     */
     private boolean isFileEmpty() {
         return txtfieldFilepath.getText() == null || txtfieldFilepath.getText().trim().isEmpty();
     }
 
+    /**
+     * checks if rating is empty or null.
+     * @return boolean
+     */
     private boolean isRatingEmpty() {
         return txtfieldIMDBRating.getText() == null || txtfieldIMDBRating.getText().trim().isEmpty();
     }
 
+    /**
+     * checks if there are the necessary inputs to create a movie.
+     * @return true or false
+     */
     private boolean isInputMissing() {
         if (isFileEmpty()) {
             AlertOpener.validationError("No movie file is chosen");
@@ -192,28 +193,40 @@ public class CreateMovieController extends BaseController {
         return false;
     }
 
-    private void addAllCategorySelectionListener() {
-        tbvAllCatsForMovie.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                selectedAllCat = newValue;
-                btnAddCat.setDisable(false);
-            }
-            else {
-                selectedAllCat = null;
-                btnAddCat.setDisable(true);
-            }
-        });
-    }
+    /**
+     * makes the tableview able to multiselect without holding control, by using node instances and mouseevents.
+     */
+    private void multiSelect(){
+        tbvAllCatsForMovie.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
+            Node node = evt.getPickResult().getIntersectedNode();
 
-    private void addMovieCategorySelectionListener() {
-        tbvMovieCats.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                selectedMovieCat = newValue;
-                btnRemoveCat.setDisable(false);
+            // go up from the target node until a row is found or it's clear the
+            // target node wasn't a node.
+            while (node != null && node != tbvAllCatsForMovie && !(node instanceof TableRow)) {
+                node = node.getParent();
             }
-            else {
-                selectedMovieCat = null;
-                btnRemoveCat.setDisable(true);
+
+            // if is part of a row or the row,
+            // handle event instead of using standard handling
+            if (node instanceof TableRow) {
+                // prevent further handling
+                evt.consume();
+
+                TableRow row = (TableRow) node;
+                TableView tv = row.getTableView();
+
+                // focus the tableview
+                tv.requestFocus();
+
+                if (!row.isEmpty()) {
+                    // handle selection for non-empty nodes
+                    int index = row.getIndex();
+                    if (row.isSelected()) {
+                        tv.getSelectionModel().clearSelection(index);
+                    } else {
+                        tv.getSelectionModel().select(index);
+                    }
+                }
             }
         });
     }
