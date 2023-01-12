@@ -4,7 +4,6 @@ import BE.Category;
 import BE.Movie;
 import GUI.Models.MovieModel;
 import GUI.Util.AlertOpener;
-import GUI.Util.ConfirmOK;
 import GUI.Util.ExceptionHandler;
 import GUI.Models.ModelsHandler;
 import GUI.Util.ModalOpener;
@@ -114,7 +113,7 @@ public class MainController extends BaseController {
     private void handleRemoveMovie(ActionEvent actionEvent) {
         Movie selectedMovie = tbvMovies.getSelectionModel().getSelectedItem();
 
-        if (selectedMovie != null && ConfirmOK.confirm("Remove movie?",
+        if (selectedMovie != null && AlertOpener.confirm("Remove movie?",
                 "Are you sure you want to remove " + selectedMovie.getTitle() + "?")) {
             try {
                 getModelsHandler().getMovieModel().deleteMovie(selectedMovie);

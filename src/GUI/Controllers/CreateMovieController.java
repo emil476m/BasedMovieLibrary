@@ -113,8 +113,10 @@ public class CreateMovieController extends BaseController {
     @Override
     public void setup() {
         setupCreateMovie();
-        addTitleListener();
         multiSelect();
+        addTitleListener();
+        addRatingListener();
+        addFileListener();
     }
 
     /**

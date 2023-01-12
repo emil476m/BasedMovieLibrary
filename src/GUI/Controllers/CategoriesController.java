@@ -2,7 +2,7 @@ package GUI.Controllers;
 
 import BE.Category;
 import GUI.Models.ModelsHandler;
-import GUI.Util.ConfirmOK;
+import GUI.Util.AlertOpener;
 import GUI.Util.ExceptionHandler;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -67,7 +67,7 @@ public class CategoriesController extends BaseController {
     private void handleRemoveCat(ActionEvent actionEvent) {
         Category catToDelete = tbvCat.getSelectionModel().getSelectedItem();
 
-        if (catToDelete != null && ConfirmOK.confirm("Remove category?",
+        if (catToDelete != null && AlertOpener.confirm("Remove category?",
                         "Are you sure you want to remove " + catToDelete.getName() + "?")) {
             try {
                 getModelsHandler().getCategoryModel().deleteCategory(catToDelete);
