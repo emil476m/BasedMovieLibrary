@@ -26,5 +26,10 @@ public interface ICatMovieManager {
 
     void deleteWhereMovie(Movie movie) throws Exception;
 
+    /**
+     * sends an ArrayList of movie objects down to the database so the movie objects category link can be deleted
+     * @param deleteOldMovies an ArrayList of movie objects
+     * @throws Exception
+     */
     void deleteWhereOldMoives(ArrayList<Movie> deleteOldMovies) throws Exception;
 }

@@ -129,6 +129,11 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
         }
     }
 
+    /**
+     * gets a list from the business logic layer of movies that should have their link deleted 
+     * @param deleteOldMovies a list of movie objects
+     * @throws Exception
+     */
     @Override
     public void deleteWhereOldMovies(ArrayList<Movie> deleteOldMovies) throws Exception {
         String sql = "DELETE FROM CatMovie WHERE id= ?";

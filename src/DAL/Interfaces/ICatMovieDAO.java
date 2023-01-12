@@ -27,5 +27,10 @@ public interface ICatMovieDAO {
 
     void deleteWhereMovie(Movie movie) throws Exception;
 
+    /**
+     * gets a list from the business logic layer of movies that should have their link deleted
+     * @param deleteOldMovies a list of movie objects
+     * @throws Exception
+     */
     void deleteWhereOldMovies(ArrayList<Movie> deleteOldMovies) throws Exception;
 }

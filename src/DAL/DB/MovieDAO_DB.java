@@ -144,6 +144,11 @@ public class MovieDAO_DB implements IMovieDAO {
         }
     }
 
+    /**
+     * gets an ArrayList of movies that have not been opened in more than 17520 hours and has a personal rating under 6
+     * @return an Arraylist of movie objects
+     * @throws Exception
+     */
     public List<Movie> getAllOldMovies() throws Exception {
         ArrayList<Movie> allOldMovies = new ArrayList<>();
 
@@ -178,6 +183,11 @@ public class MovieDAO_DB implements IMovieDAO {
         }
     }
 
+    /**
+     * deletes a list of movie objects from the database
+     * @param deleteAllOldMovies a list of movie objects to delete
+     * @throws Exception
+     */
     @Override
     public void deleteAllOldMovies(ArrayList<Movie> deleteAllOldMovies) throws Exception {
         String sql = "DELETE FROM Movie WHERE id= ?";
@@ -202,6 +212,12 @@ public class MovieDAO_DB implements IMovieDAO {
         }
     }
 
+    /**
+     * updates the lastView colum in the movie table of the database
+     * @param open a boolean value that is true if a movie was opened
+     * @param movie a movie object that the user has selected in the gui
+     * @throws Exception
+     */
     @Override
     public void updateLastViewed(Boolean open, Movie movie) throws Exception {
         String sql = "UPDATE Movie SET LastView = GETDATE() WHERE Id = ?;";

@@ -22,15 +22,28 @@ public class DeleteReminderModel {
     }
 
 
+    /**
+     * gets a ObservableList of movie objects
+     * @return a ObservableList of movie objects
+     */
     public ObservableList<Movie> getMoviesToDelete()
     {
         return moviesToDelete;
     }
 
+    /**
+     * makes a call to the deleteReminderManager to get all movies
+     * @throws Exception
+     */
     public void addMoviesToMoviesToDelete() throws Exception {
-        moviesToDelete.addAll(deleteReminderManager.getAllMovies());
+        moviesToDelete.addAll(deleteReminderManager.getAllOldMovies());
     }
 
+    /**
+     * sends a movie object to the deleteReminderManager and catMovieManager before removing the movie from the moviesToDelete ObservableList
+     * @param movie the movie object that the user wants to delete
+     * @throws Exception
+     */
     public void deleteMovie(Movie movie) throws Exception
     {
         deleteReminderManager.deleteMovie(movie);
@@ -40,6 +53,10 @@ public class DeleteReminderModel {
         moviesToDelete.remove(movie);
     }
 
+    /**
+     * sends the deleteAllMovies list to the deleteReminderManager and catMovieManager before clearing and updating the ObservableList moviesToDelete
+     * @throws Exception
+     */
     public void deleteAllmovies() throws Exception {
         ArrayList<Movie> deleteAllMovies = (ArrayList<Movie>) moviesToDelete;
         deleteReminderManager.deleteAllMovies(deleteAllMovies);
@@ -49,11 +66,18 @@ public class DeleteReminderModel {
         getMoviesToDelete();
     }
 
+    /**
+     * Clears the ObservableList moviesToDelete
+     */
     public void ClearListOnClose()
     {
         moviesToDelete.clear();
     }
 
+    /**
+     * Checks if the moviesToDelete ObservableList's size is bigger than 0 so the computer knows that the list is not empty
+     * @return returns true if moviesToDelete has a size bigger than 0 else it returns false
+     */
     public boolean isntEmpty()
     {
         getMoviesToDelete();

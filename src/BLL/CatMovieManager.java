@@ -57,6 +57,11 @@ public class CatMovieManager implements ICatMovieManager {
         catMovieDAO.deleteWhereMovie(movie);
     }
 
+    /**
+     * sends an ArrayList to the database to delete the category link the movies in the list has
+     * @param deleteOldMovies an ArrayList of movie objects
+     * @throws Exception
+     */
     @Override
     public void deleteWhereOldMoives(ArrayList<Movie> deleteOldMovies) throws Exception {
         catMovieDAO.deleteWhereOldMovies(deleteOldMovies);

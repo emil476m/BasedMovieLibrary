@@ -38,7 +38,18 @@ public interface IMovieDAO {
      */
     List<Movie> getAllOldMovies() throws Exception;
 
+    /**
+     * gets a list from the business logic layer of movies that should be deleted
+     * @param deleteAllOldMovies a list of movie objects to delete
+     * @throws Exception
+     */
     void deleteAllOldMovies(ArrayList<Movie> deleteAllOldMovies) throws Exception;
 
+    /**
+     * gets a boolean value and movie object so the database knows to update when the movie was last viewed
+     * @param open a boolean value that is true if a movie was opened
+     * @param movie a movie object that the user has selected in the gui
+     * @throws Exception
+     */
     void updateLastViewed(Boolean open, Movie movie) throws Exception;
 }

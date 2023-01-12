@@ -239,6 +239,9 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * opens the standard mediaPlayer on the user's computer
+     */
     private void openMediaPlayer()
     {
         selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
@@ -257,6 +260,9 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * checks if there are any movies that have not been opened in more than 2 years and has a personal rating under 6
+     */
     private void checkDate() {
 
         if (getModelsHandler().getDeleteReminderModel().isntEmpty())
@@ -265,6 +271,9 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * Opens a new window that shows the user some movies they might want to delete
+     */
     private void openDeleteReminder()
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/DeleteMovieReminder.fxml"));
