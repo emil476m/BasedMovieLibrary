@@ -135,14 +135,13 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
      * @throws Exception
      */
     @Override
-    public void deleteWhereOldMovies(ArrayList<Movie> deleteOldMovies) throws Exception {
-        String sql = "DELETE FROM CatMovie WHERE id= ?";
-        ArrayList<Movie> allOldMovies = (ArrayList<Movie>) deleteOldMovies;
+    public void deleteWhereOldMovies(List<Movie> deleteOldMovies) throws Exception {
+        String sql = "DELETE FROM CatMovie WHERE MovieId= ?";
 
         try(Connection connection = databaseConnector.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql))
         {
-            for (Movie m: allOldMovies)
+            for (Movie m: deleteOldMovies)
             {
                 statement.setInt(1,m.getId());
 

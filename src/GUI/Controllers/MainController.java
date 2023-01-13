@@ -1,11 +1,13 @@
 package GUI.Controllers;
 
 import BE.Movie;
-import GUI.Models.DeleteReminderModel;
 import GUI.Util.ConfirmOK;
 import GUI.Util.ExceptionHandler;
 import GUI.Util.ModalOpener;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +22,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.io.File;
@@ -63,12 +66,12 @@ public class MainController extends BaseController {
     }
 
 
-
+    /**
+     * opens the view where we can add a movie.
+     * @param actionEvent
+     */
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
-        //clears category tableview for createMovieController
-        getModelsHandler().getMovieModel().getCategoryObservableList().clear();
-
         //Load the new stage & view
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/CreateMovieView.fxml"));
         Parent root = null;
@@ -155,7 +158,6 @@ public class MainController extends BaseController {
     public void setup()
     {
         initializeMovies();
-        checkDate();
     }
 
     /**
@@ -169,6 +171,10 @@ public class MainController extends BaseController {
         clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
 
+    /**
+     * Opens an Input alert box where you can write your personal rating.
+     * @param actionEvent
+     */
     @FXML
     private void handleEditPRating(ActionEvent actionEvent) {
         Movie movie = tbvMovies.getSelectionModel().getSelectedItem();
@@ -191,6 +197,10 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * closes the program, when you press the close button.
+     * @param actionEvent
+     */
     @FXML
     private void handleClose(ActionEvent actionEvent) {
         Stage stage = (Stage) btnClose.getScene().getWindow();
@@ -258,42 +268,5 @@ public class MainController extends BaseController {
                 }
             }
         }
-    }
-
-    /**
-     * checks if there are any movies that have not been opened in more than 2 years and has a personal rating under 6
-     */
-    private void checkDate() {
-
-        if (getModelsHandler().getDeleteReminderModel().isntEmpty())
-        {
-            openDeleteReminder();
-        }
-    }
-
-    /**
-     * Opens a new window that shows the user some movies they might want to delete
-     */
-    private void openDeleteReminder()
-    {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/DeleteMovieReminder.fxml"));
-        Parent root = null;
-
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            ExceptionHandler.displayError(new Exception("Failed to open movie creator", e));
-        }
-
-        Stage stage = new Stage();
-        stage.setTitle("Delete reminder");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-
-
-        DeleteMovieReminderController controller = loader.getController();
-        controller.setModel(getModelsHandler());
-        controller.setup();
-        stage.showAndWait();
     }
 }

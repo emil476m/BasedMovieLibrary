@@ -5,12 +5,33 @@ import BLL.Interfaces.IMovieManager;
 import DAL.DB.MovieDAO_DB;
 import DAL.Interfaces.IMovieDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieManager implements IMovieManager {
     IMovieDAO movieDAO;
     public MovieManager(){
         movieDAO = new MovieDAO_DB();
+    }
+
+    /**
+     * gets a list of all movie objects that have not been opened in more than 2 years and has a personal rating of less than 6
+     * @return a list of movie objects
+     * @throws Exception
+     */
+    @Override
+    public List<Movie> getAllOldMovies() throws Exception {
+        return movieDAO.getAllOldMovies();
+    }
+
+    /**
+     * sends an ArrayList of movie objects down to the database so the movie objects can be deleted
+     * @param deleteAllMovies an ArrayList of movie objects
+     * @throws Exception
+     */
+    @Override
+    public void deleteAllMovies(List<Movie> deleteAllMovies) throws Exception {
+        movieDAO.deleteAllOldMovies(deleteAllMovies);
     }
 
     /**
@@ -52,7 +73,7 @@ public class MovieManager implements IMovieManager {
     }
 
     @Override
-    public void updateLastViewed(Boolean opened, Movie movie) throws Exception {
-        movieDAO.updateLastViewed(opened,movie);
+    public void updateLastViewed(Movie movie) throws Exception {
+        movieDAO.updateLastViewed(movie);
     }
 }

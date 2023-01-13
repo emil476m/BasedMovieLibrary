@@ -2,9 +2,24 @@ package BLL.Interfaces;
 
 import BE.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IMovieManager {
+    /**
+     * gets a list of all movie objects that have not been opened in more than 2 years and has a personal rating of less than 6
+     * @return a list of movie objects
+     * @throws Exception
+     */
+    List<Movie> getAllOldMovies() throws Exception;
+
+    /**
+     * sends an ArrayList of movie objects down to the database so the movie objects can be deleted
+     * @param deleteAllMovies an ArrayList of movie objects
+     * @throws Exception
+     */
+    void deleteAllMovies(List<Movie> deleteAllMovies) throws Exception;
+
     /**
      * Return a list of Movie objects from the database.
      * @return A list of all Movies.
@@ -29,5 +44,5 @@ public interface IMovieManager {
      */
     void editPRating(Movie movie) throws Exception;
 
-    void updateLastViewed(Boolean opened, Movie movie) throws Exception;
+    void updateLastViewed(Movie movie) throws Exception;
 }

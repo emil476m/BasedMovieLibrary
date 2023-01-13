@@ -31,5 +31,5 @@ public interface ICatMovieManager {
      * @param deleteOldMovies an ArrayList of movie objects
      * @throws Exception
      */
-    void deleteWhereOldMoives(ArrayList<Movie> deleteOldMovies) throws Exception;
+    void deleteWhereOldMoives(List<Movie> deleteOldMovies) throws Exception;
 }

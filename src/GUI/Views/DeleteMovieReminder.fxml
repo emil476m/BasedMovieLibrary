@@ -43,13 +43,13 @@
                <children>
                   <HBox prefHeight="29.0" prefWidth="156.0" GridPane.columnIndex="1">
                      <children>
-                        <Button fx:id="DeleteAllBtn" mnemonicParsing="false" text="Delete all" onAction="#DeleteAllMovies" />
-                        <Button fx:id="DeleteBtn" mnemonicParsing="false" text="Delete" onAction="#DeleteMovie">
+                        <Button fx:id="DeleteAllBtn" mnemonicParsing="false" onAction="#DeleteAllMovies" text="Delete all" />
+                        <Button fx:id="DeleteBtn" disable="true" mnemonicParsing="false" onAction="#DeleteMovie" text="Delete">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="CloseBtn" mnemonicParsing="false" text="Close" onAction="#handleClose">
+                        <Button fx:id="CloseBtn" mnemonicParsing="false" onAction="#handleClose" text="Close">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>

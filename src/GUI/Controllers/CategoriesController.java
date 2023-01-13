@@ -31,10 +31,6 @@ public class CategoriesController extends BaseController {
     @FXML
     private TextField txtfieldNewCat;
 
-    public CategoriesController() {
-
-    }
-
     @Override
     public void setup() {
         tbvCat.setItems(getModelsHandler().getCategoryModel().getCategories());

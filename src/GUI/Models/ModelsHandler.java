@@ -11,12 +11,10 @@ import BE.Movie;
 public class ModelsHandler {
     private CategoryModel categoryModel;
     private MovieModel movieModel;
-    private DeleteReminderModel deleteReminderModel;
 
     public ModelsHandler() throws Exception {
         categoryModel = new CategoryModel();
         movieModel = new MovieModel();
-        deleteReminderModel = new DeleteReminderModel();
         initializeMovieCategories();
     }
 
@@ -24,8 +22,11 @@ public class ModelsHandler {
      * finds the correct category name/type from at category id.
      */
     private void initializeMovieCategories(){
+        //loops through all catMovies.
         for (CatMovie catMovie: movieModel.getCatMovieList()){
+            //loops through all movies to find the movie with the given id.
             Movie movie = movieModel.getMovieFromID(catMovie.getMovieId());
+            //loops through all categories to find the category with the given id.
             Category cat = categoryModel.getCategoryFromID(catMovie.getCategoryId());
 
             if ((movie != null) && (cat != null)){
@@ -40,6 +41,4 @@ public class ModelsHandler {
     }
 
     public MovieModel getMovieModel() { return movieModel; }
-
-   public DeleteReminderModel getDeleteReminderModel() { return deleteReminderModel; }
 }

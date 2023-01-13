@@ -189,14 +189,13 @@ public class MovieDAO_DB implements IMovieDAO {
      * @throws Exception
      */
     @Override
-    public void deleteAllOldMovies(ArrayList<Movie> deleteAllOldMovies) throws Exception {
+    public void deleteAllOldMovies(List<Movie> deleteAllOldMovies) throws Exception {
         String sql = "DELETE FROM Movie WHERE id= ?";
-        ArrayList<Movie> allOldMovies = (ArrayList<Movie>) deleteAllOldMovies;
 
         try(Connection connection = databaseConnector.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql))
         {
-            for (Movie m: allOldMovies)
+            for (Movie m: deleteAllOldMovies)
             {
                 statement.setInt(1,m.getId());
 
@@ -214,12 +213,11 @@ public class MovieDAO_DB implements IMovieDAO {
 
     /**
      * updates the lastView colum in the movie table of the database
-     * @param open a boolean value that is true if a movie was opened
      * @param movie a movie object that the user has selected in the gui
      * @throws Exception
      */
     @Override
-    public void updateLastViewed(Boolean open, Movie movie) throws Exception {
+    public void updateLastViewed(Movie movie) throws Exception {
         String sql = "UPDATE Movie SET LastView = GETDATE() WHERE Id = ?;";
 
         try(Connection connection = databaseConnector.getConnection();
