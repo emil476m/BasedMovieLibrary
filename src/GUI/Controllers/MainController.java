@@ -66,12 +66,12 @@ public class MainController extends BaseController {
     }
 
 
-
+    /**
+     * opens the view where we can add a movie.
+     * @param actionEvent
+     */
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
-        //clears category tableview for createMovieController
-        getModelsHandler().getMovieModel().getCategoryObservableList().clear();
-
         //Load the new stage & view
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/CreateMovieView.fxml"));
         Parent root = null;
@@ -171,6 +171,10 @@ public class MainController extends BaseController {
         clmPRating.setCellValueFactory(new PropertyValueFactory<>("PRating"));
     }
 
+    /**
+     * Opens an Input alert box where you can write your personal rating.
+     * @param actionEvent
+     */
     @FXML
     private void handleEditPRating(ActionEvent actionEvent) {
         Movie movie = tbvMovies.getSelectionModel().getSelectedItem();
@@ -193,6 +197,10 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * closes the program, when you press the close button.
+     * @param actionEvent
+     */
     @FXML
     private void handleClose(ActionEvent actionEvent) {
         Stage stage = (Stage) btnClose.getScene().getWindow();
