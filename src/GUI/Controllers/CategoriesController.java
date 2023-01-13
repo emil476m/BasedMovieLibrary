@@ -12,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,10 +30,6 @@ public class CategoriesController extends BaseController {
     private Button btnCancel;
     @FXML
     private TextField txtfieldNewCat;
-
-    public CategoriesController() {
-
-    }
 
     @Override
     public void setup() {
@@ -77,5 +74,7 @@ public class CategoriesController extends BaseController {
 
     @FXML
     private void handleCancel(ActionEvent actionEvent) {
+        Stage stage = (Stage) btnCancel.getScene().getWindow();
+        stage.close();
     }
 }
