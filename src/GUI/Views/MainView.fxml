@@ -52,14 +52,14 @@
               </rowConstraints>
                <children>
                   <Button fx:id="btnAddMovie" mnemonicParsing="false" onAction="#handleAddMovie" text="Add" />
-                  <Button fx:id="btnRemoveMovie" mnemonicParsing="false" onAction="#handleRemoveMovie" text="Remove" GridPane.columnIndex="1" />
-                  <Button fx:id="btnEditPRating" mnemonicParsing="false" onAction="#handleEditPRating" prefHeight="25.0" prefWidth="97.0" text="Edit My Rating" GridPane.columnIndex="2" />
+                  <Button fx:id="btnRemoveMovie" disable="true" mnemonicParsing="false" onAction="#handleRemoveMovie" text="Remove" GridPane.columnIndex="1" />
+                  <Button fx:id="btnEditPRating" disable="true" mnemonicParsing="false" onAction="#handleEditPRating" prefHeight="25.0" prefWidth="97.0" text="Edit My Rating" GridPane.columnIndex="2" />
                   <Button fx:id="btnClose" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleClose" text="Close" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="50.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnIMDB" mnemonicParsing="false" onAction="#handleShowIMDB" text="IMDB" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Button fx:id="btnIMDB" disable="true" mnemonicParsing="false" onAction="#handleShowIMDB" text="IMDB" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </children>

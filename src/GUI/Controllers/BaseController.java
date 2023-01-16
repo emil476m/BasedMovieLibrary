@@ -13,5 +13,16 @@ public abstract class BaseController {
         return modelsHandler;
     }
 
+    public boolean isRatingInputValid(String rating) {
+        try {
+            double doubleRating = Double.parseDouble(rating);
+
+            if (doubleRating <= 10.0 && doubleRating >= 0.0) return true;
+        }
+        catch (NumberFormatException ignore) {}
+
+        return false;
+    }
+
     public abstract void setup();
 }

@@ -56,7 +56,7 @@
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Title" wrappingWidth="50.13671875" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="IMDB Rating" wrappingWidth="79.13671875" GridPane.rowIndex="2" />
-            <TextField fx:id="txtfieldFilepath" GridPane.rowIndex="5" />
+            <TextField fx:id="txtfieldFilepath" editable="false" focusTraversable="false" GridPane.rowIndex="5" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filepath:" GridPane.rowIndex="4" />
             <TextField fx:id="txtfieldIMDBRating" GridPane.rowIndex="3" />
             <TextField fx:id="txtfieldTitle" GridPane.rowIndex="1" />

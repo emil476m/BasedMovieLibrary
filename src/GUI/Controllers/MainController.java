@@ -23,6 +23,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.stage.StageStyle;
+import javafx.util.StringConverter;
 
 import java.awt.*;
 import java.io.File;
@@ -60,11 +62,6 @@ public class MainController extends BaseController {
 
     private Movie selectedMovie;
     private File directory;
-
-    public MainController() {
-
-    }
-
 
     /**
      * opens the view where we can add a movie.
@@ -108,7 +105,7 @@ public class MainController extends BaseController {
     private void handleRemoveMovie(ActionEvent actionEvent) {
         Movie selectedMovie = tbvMovies.getSelectionModel().getSelectedItem();
 
-        if (selectedMovie != null && ConfirmOK.confirm("Remove movie?",
+        if (selectedMovie != null && AlertOpener.confirm("Remove movie?",
                 "Are you sure you want to remove " + selectedMovie.getTitle() + "?")) {
             try {
                 getModelsHandler().getMovieModel().deleteMovie(selectedMovie);
@@ -155,9 +152,9 @@ public class MainController extends BaseController {
     }
 
     @Override
-    public void setup()
-    {
+    public void setup() {
         initializeMovies();
+        setTbvMoviesChangeListener();
     }
 
     /**
@@ -178,21 +175,35 @@ public class MainController extends BaseController {
     @FXML
     private void handleEditPRating(ActionEvent actionEvent) {
         Movie movie = tbvMovies.getSelectionModel().getSelectedItem();
-        TextInputDialog dialog = new TextInputDialog("" + movie.getPRating());
-        dialog.setTitle("Edit Personal Rating");
-        dialog.setHeaderText("Rate movie: " + movie.getTitle());
-        dialog.setContentText("What would you rate the movie?");
 
-// Traditional way to get the response value.
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
-            //TODO make a check for int with alert box
-            Double rating = Double.parseDouble(result.get());
-            try {
-                getModelsHandler().getMovieModel().editPRating(movie, rating);
-                tbvMovies.refresh();
-            } catch (Exception e) {
-                ExceptionHandler.displayError(e);
+        if (movie != null) {
+            TextInputDialog dialog = new TextInputDialog("" + movie.getPRating());
+            dialog.setTitle("Edit Personal Rating");
+            dialog.setHeaderText("Rate movie: " + movie.getTitle());
+            dialog.setContentText("What would you rate the movie?");
+
+            // Traditional way to get the response value.
+            Optional<String> result = dialog.showAndWait();
+
+            if (result.isPresent()){
+                if (!isRatingInputValid(dialog.getEditor().getText())) {
+                    dialog.getEditor().setText("");
+                    AlertOpener.validationError("Personal rating must be between 0.0 and 10.0");
+
+                    // Opens the dialog again if the personal rating was invalid.
+                    handleEditPRating(new ActionEvent());
+                }
+                else {
+                    String[] splitRating = result.get().split("\\.");
+                    double rating = Double.parseDouble(splitRating[0] + "." + splitRating[1].charAt(0));
+
+                    try {
+                        getModelsHandler().getMovieModel().editPRating(movie, rating);
+                        tbvMovies.refresh();
+                    } catch (Exception e) {
+                        ExceptionHandler.displayError(e);
+                    }
+                }
             }
         }
     }
@@ -212,10 +223,11 @@ public class MainController extends BaseController {
      * @param actionEvent
      */
     public void handleShowIMDB(ActionEvent actionEvent) {
-        try{
+        selectedMovie = tbvMovies.getSelectionModel().getSelectedItem();
+
+        if (selectedMovie != null) {
             Desktop desktop = Desktop.getDesktop();
             String link = "http://www.imdb.com/find?s=tt&q=";
-            selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
             String title = selectedMovie.getTitle().replace(" ", "");
             if(desktop.isSupported(Desktop.Action.BROWSE))
             {
@@ -223,17 +235,28 @@ public class MainController extends BaseController {
                 {
                     desktop.browse(URI.create(link+title));
                 }
-                catch (Exception e)
+                catch (IOException e)
                 {
-                    ExceptionHandler.displayError(e);
+                    e.printStackTrace();
+                    ExceptionHandler.displayError(new Exception("Failed to open IMDB", e));
                 }
             }
         }
-        catch (Exception ex)
-        {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "you don't have a movie selected", ButtonType.CLOSE);
-            alert.showAndWait();
-        }
+    }
+
+    /**
+     * Disables/enables the remove movie button,
+     * the open IMDB button, and the edit personal rating button,
+     * if no movie has been selected.
+     */
+    private void setTbvMoviesChangeListener() {
+        tbvMovies.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            boolean disable = newValue == null;
+
+            btnRemoveMovie.setDisable(disable);
+            btnIMDB.setDisable(disable);
+            btnEditPRating.setDisable(disable);
+        });
     }
 
     /**
