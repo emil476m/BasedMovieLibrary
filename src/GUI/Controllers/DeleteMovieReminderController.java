@@ -1,10 +1,8 @@
 package GUI.Controllers;
 
 import BE.Movie;
-import GUI.Util.ConfirmOK;
+import GUI.Util.AlertOpener;
 import GUI.Util.ExceptionHandler;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -55,7 +53,7 @@ public class DeleteMovieReminderController extends BaseController {
 
         if (selectedMovie != null) {
             try {
-                if(ConfirmOK.confirm("Are you sure?", "Do you want to delete the movie"))
+                if(AlertOpener.confirm("Are you sure?", "Do you want to delete the movie"))
                 {
                     getModelsHandler().getMovieModel().deleteMovieToDelete(selectedMovie);
                 }
@@ -70,7 +68,7 @@ public class DeleteMovieReminderController extends BaseController {
     public void DeleteAllMovies(ActionEvent event) {
         try
         {
-            if(ConfirmOK.confirm("Are you sure?", "Do you want to delete all movies on the list?"))
+            if(AlertOpener.confirm("Are you sure?", "Do you want to delete all movies on the list?"))
             {
                 getModelsHandler().getMovieModel().deleteAllMoviesToDelete();
 

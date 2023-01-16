@@ -1,13 +1,10 @@
 package GUI.Controllers;
 
 import BE.Movie;
-import GUI.Util.ConfirmOK;
+import GUI.Util.AlertOpener;
 import GUI.Util.ExceptionHandler;
 import GUI.Util.ModalOpener;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
