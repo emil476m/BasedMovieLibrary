@@ -7,26 +7,30 @@ import BLL.CatMovieManager;
 import BLL.Interfaces.ICatMovieManager;
 import BLL.Interfaces.IMovieManager;
 import BLL.MovieManager;
+import javafx.beans.binding.ObjectExpression;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 public class MovieModel {
 
-    IMovieManager movieManager;
-    ICatMovieManager catMovieManager;
-    List<CatMovie> catMovieList;
+    private IMovieManager movieManager;
+    private ICatMovieManager catMovieManager;
+    private List<CatMovie> catMovieList;
+    private List<Movie> allMovies;
     private ObservableList<Movie> movieObservableList;
     private ObservableList<Movie> moviesToDelete;
-
 
     public MovieModel() throws Exception {
         movieManager = new MovieManager();
         catMovieManager = new CatMovieManager();
         catMovieList = new ArrayList<>();
+        allMovies = new ArrayList<>();
         movieObservableList = FXCollections.observableArrayList();
         moviesToDelete = FXCollections.observableArrayList();
         getAllMovies();
@@ -62,7 +66,9 @@ public class MovieModel {
         catMovieList.addAll(catMovieManager.getAllCatMovies());
     }
     private void getAllMovies() throws Exception {
-        movieObservableList.addAll(movieManager.getAllMovies());
+        List<Movie> movies = movieManager.getAllMovies();
+        movieObservableList.addAll(movies);
+        allMovies.addAll(movies);
     }
 
     public List<CatMovie> getCatMovieList() {
@@ -75,7 +81,7 @@ public class MovieModel {
     public ObservableList<Movie> getMoviesToDeleteObservableList() { return moviesToDelete; }
 
     /**
-     * loops trough all movies in the observable list.
+     * loops through all movies in the observable list.
      * @param id movie id.
      * @return movie with the given id.
      */
@@ -94,13 +100,14 @@ public class MovieModel {
      * @param query
      * @return the list of movies that contain the query
      */
-    public ObservableList<Movie> getSearchResults(String query)
+    /*public ObservableList<Movie> getSearchResults(String query)
     {
         ObservableList<Movie> searchResults = FXCollections.observableArrayList();
+
         for (Movie m: movieObservableList)
         {
             boolean titleContains = m.getTitle().toLowerCase().contains(query);
-            boolean categoriesContains = m.getCategoryNames().toLowerCase().contains(query);
+            boolean categoriesContains = !m.getCategories().isEmpty() && m.getCategoryNames().toLowerCase().contains(query);
             boolean ratingContains = String.valueOf(m.getRating()).contains(query);
             boolean pRatingContains = String.valueOf(m.getPRating()).contains(query);
 
@@ -110,6 +117,27 @@ public class MovieModel {
         }
 
         return searchResults;
+    }*/
+
+    public void searchMovies (String query) {
+        movieObservableList.clear();
+
+        for (Movie m: allMovies)
+        {
+            boolean titleContains = m.getTitle().toLowerCase().contains(query);
+            boolean categoriesContains = !m.getCategories().isEmpty() && m.getCategoryNames().toLowerCase().contains(query);
+            boolean ratingContains = String.valueOf(m.getRating()).contains(query);
+            boolean pRatingContains = String.valueOf(m.getPRating()).contains(query);
+
+            boolean addMovie = titleContains || categoriesContains || ratingContains || pRatingContains;
+
+            if (addMovie) movieObservableList.add(m);
+        }
+    }
+
+    public void clearSearch() {
+        movieObservableList.clear();
+        movieObservableList.addAll(allMovies);
     }
 
     /**
@@ -124,6 +152,7 @@ public class MovieModel {
         catMovieManager.createMovies(newMovie);
         //adds the movie to the observable list so the user can see it.
         movieObservableList.add(newMovie);
+        allMovies.add(newMovie);
     }
 
     /**
@@ -163,6 +192,7 @@ public class MovieModel {
         catMovieManager.deleteWhereMovie(movie);
 
         movieObservableList.remove(movie);
+        allMovies.remove(movie);
     }
 
     /**
@@ -175,6 +205,7 @@ public class MovieModel {
         catMovieManager.deleteWhereOldMoives(moviesToDelete);
 
         movieObservableList.removeAll(moviesToDelete);
+        allMovies.remove(moviesToDelete);
         moviesToDelete.clear();
     }
 

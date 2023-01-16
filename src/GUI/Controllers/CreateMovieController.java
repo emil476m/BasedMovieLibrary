@@ -93,7 +93,7 @@ public class CreateMovieController extends BaseController {
 
         String title = txtfieldTitle.getText();
         String[] splitRating = txtfieldIMDBRating.getText().split("\\.");
-        Double rating = Double.parseDouble(splitRating[0] + "." + splitRating[1].charAt(0));
+        Double rating = Double.parseDouble(splitRating.length > 1 ? splitRating[0] + "." + splitRating[1].charAt(0) : splitRating[0]);
         String path = txtfieldFilepath.getText();
         List<Category> categoryList = tbvAllCatsForMovie.getSelectionModel().getSelectedItems();
 
@@ -101,6 +101,7 @@ public class CreateMovieController extends BaseController {
 
         try {
             getModelsHandler().getMovieModel().createMovie(movie);
+            getModelsHandler().getMovieModel().clearSearch();
             handleCancel();
         } catch (Exception e) {
             ExceptionHandler.displayError(e);

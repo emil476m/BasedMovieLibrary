@@ -4,6 +4,7 @@ import BE.Movie;
 import GUI.Util.AlertOpener;
 import GUI.Util.ExceptionHandler;
 import GUI.Util.ModalOpener;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +30,7 @@ import java.io.IOException;
 
 import java.net.URI;
 import java.util.*;
+import java.util.List;
 
 public class MainController extends BaseController {
     public Button btnIMDB;
@@ -115,7 +117,8 @@ public class MainController extends BaseController {
 
     private void search(String search) {
         String query = search.toLowerCase();
-        tbvMovies.setItems(getModelsHandler().getMovieModel().getSearchResults(query));
+        //tbvMovies.setItems(getModelsHandler().getMovieModel().getSearchResults(query));
+        getModelsHandler().getMovieModel().searchMovies(query);
     }
 
     /**
@@ -133,7 +136,7 @@ public class MainController extends BaseController {
     private void onClearSearch(ActionEvent actionEvent) {
         if (txtfieldSearch.getText() != null) {
             txtfieldSearch.setText("");
-            search("");
+            getModelsHandler().getMovieModel().clearSearch();
         }
     }
 
@@ -192,7 +195,7 @@ public class MainController extends BaseController {
                 }
                 else {
                     String[] splitRating = result.get().split("\\.");
-                    double rating = Double.parseDouble(splitRating[0] + "." + splitRating[1].charAt(0));
+                    double rating = Double.parseDouble(splitRating.length > 1 ? splitRating[0] + "." + splitRating[1].charAt(0) : splitRating[0]);
 
                     try {
                         getModelsHandler().getMovieModel().editPRating(movie, rating);
