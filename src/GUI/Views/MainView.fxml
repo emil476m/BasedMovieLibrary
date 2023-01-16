@@ -66,7 +66,7 @@
       </HBox>
       <HBox layoutX="524.0" layoutY="66.0" prefHeight="26.0" prefWidth="246.0">
          <children>
-            <TextField fx:id="txtfieldSearch" onKeyPressed="#searchOnButtonPress" />
+            <TextField fx:id="txtfieldSearch" onKeyPressed="#searchOnButtonPress" promptText="Search" />
             <Button fx:id="btnsearch" mnemonicParsing="false" onAction="#handleSearch" text="Search" />
             <Button mnemonicParsing="false" onAction="#onClearSearch" text="Clear" />
          </children>
