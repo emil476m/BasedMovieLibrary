@@ -202,7 +202,8 @@ public class MainController extends BaseController {
                     handleEditPRating(new ActionEvent());
                 }
                 else {
-                    double rating = Double.parseDouble(result.get());
+                    String[] splitRating = result.get().split("\\.");
+                    double rating = Double.parseDouble(splitRating[0] + "." + splitRating[1].charAt(0));
 
                     try {
                         getModelsHandler().getMovieModel().editPRating(movie, rating);
