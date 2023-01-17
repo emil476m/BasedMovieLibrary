@@ -2,7 +2,10 @@ package GUI.Controllers;
 
 import BE.Category;
 import BE.Movie;
+import GUI.Util.AlertOpener;
 import GUI.Util.ExceptionHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -17,9 +20,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class CreateMovieController extends BaseController {
     @FXML
@@ -50,6 +53,13 @@ public class CreateMovieController extends BaseController {
         stage.close();
     }
 
+    private final ChangeListener<String> fieldChangeListener = new ChangeListener<>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            btnCreateMovie.setDisable(isFileEmpty() || isTitleEmpty() || isRatingEmpty());
+        }
+    };
+
     /**
      * helps the user get the filepath for their movie.
      * @param actionEvent
@@ -59,14 +69,16 @@ public class CreateMovieController extends BaseController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Add your movie");
 
-        FileChooser.ExtensionFilter videoExtensions = new FileChooser.ExtensionFilter("Video files", "*.mp4");
+        FileChooser.ExtensionFilter videoExtensions = new FileChooser.ExtensionFilter("Video files", "*.mp4", "*.mpeg4");
 
         fileChooser.getExtensionFilters().add(videoExtensions);
 
         file = fileChooser.showOpenDialog((Stage) btnCancel.getScene().getWindow());
 
         if(file != null) {
-            txtfieldFilepath.setText(file.getAbsolutePath());
+            String fileUriString = file.toURI().toString();
+
+            if ((fileUriString.endsWith(".mp4") || fileUriString.endsWith(".mpeg4"))) txtfieldFilepath.setText(file.getAbsolutePath());
         }
     }
 
@@ -80,7 +92,8 @@ public class CreateMovieController extends BaseController {
         }
 
         String title = txtfieldTitle.getText();
-        Double rating = Double.parseDouble(txtfieldIMDBRating.getText());
+        String[] splitRating = txtfieldIMDBRating.getText().split("\\.");
+        Double rating = Double.parseDouble(splitRating.length > 1 ? splitRating[0] + "." + splitRating[1].charAt(0) : splitRating[0]);
         String path = txtfieldFilepath.getText();
         List<Category> categoryList = tbvAllCatsForMovie.getSelectionModel().getSelectedItems();
 
@@ -88,6 +101,7 @@ public class CreateMovieController extends BaseController {
 
         try {
             getModelsHandler().getMovieModel().createMovie(movie);
+            getModelsHandler().getMovieModel().clearSearch();
             handleCancel();
         } catch (Exception e) {
             ExceptionHandler.displayError(e);
@@ -100,8 +114,10 @@ public class CreateMovieController extends BaseController {
     @Override
     public void setup() {
         setupCreateMovie();
-        addTitleListener();
         multiSelect();
+        addTitleListener();
+        addRatingListener();
+        addFileListener();
     }
 
     /**
@@ -118,14 +134,15 @@ public class CreateMovieController extends BaseController {
     }
 
     private void addTitleListener(){
-        txtfieldTitle.textProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (isFileEmpty()) {
-                btnCreateMovie.setDisable(true);
-            }
-            else if (!isTitleEmpty() && !isRatingEmpty()) {
-                btnCreateMovie.setDisable(false);
-            }
-        });
+        txtfieldTitle.textProperty().addListener(fieldChangeListener);
+    }
+
+    private void addRatingListener(){
+        txtfieldIMDBRating.textProperty().addListener(fieldChangeListener);
+    }
+
+    private void addFileListener(){
+        txtfieldFilepath.textProperty().addListener(fieldChangeListener);
     }
 
     /**
@@ -158,17 +175,22 @@ public class CreateMovieController extends BaseController {
      */
     private boolean isInputMissing() {
         if (isFileEmpty()) {
-            ExceptionHandler.displayError(new Exception("No movie file is chosen"));
+            AlertOpener.validationError("No movie file is chosen");
             return true;
         }
 
         if (isRatingEmpty()) {
-            ExceptionHandler.displayError(new Exception("Rating can not be empty"));
+            AlertOpener.validationError("IMDB rating can not be empty");
+            return true;
+        }
+        else if (!isRatingInputValid(txtfieldIMDBRating.getText())) {
+            txtfieldIMDBRating.setText("");
+            AlertOpener.validationError("IMDB rating must be between 0.0 and 10.0");
             return true;
         }
 
         if (isTitleEmpty()) {
-            ExceptionHandler.displayError(new Exception("Title can not be empty"));
+            AlertOpener.validationError("Title can not be empty");
             return true;
         }
         return false;

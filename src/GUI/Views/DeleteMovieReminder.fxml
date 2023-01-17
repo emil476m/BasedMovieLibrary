@@ -11,7 +11,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.DeleteMovieReminderController">
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.DeleteMovieReminderController" stylesheets="@../Css/Style.Css" styleClass="background">
    <children>
       <GridPane layoutX="14.0" layoutY="17.0" prefHeight="362.0" prefWidth="573.0">
         <columnConstraints>
@@ -23,7 +24,7 @@
           <RowConstraints maxHeight="70.00003662109378" minHeight="2.000036621093784" prefHeight="27.4000244140625" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TableView fx:id="TbvDMovies" prefHeight="300.0" prefWidth="584.0" GridPane.rowIndex="1">
+            <TableView fx:id="TbvDMovies" prefHeight="300.0" prefWidth="584.0" GridPane.rowIndex="1" styleClass="backgroundTbv">
               <columns>
                 <TableColumn fx:id="ColMovieTitle" prefWidth="270.4000244140625" text="Title" />
                 <TableColumn fx:id="ColMovieCategory" prefWidth="140.0" text="Category" />

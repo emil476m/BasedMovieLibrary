@@ -2,8 +2,13 @@ package GUI.Controllers;
 
 import BE.Category;
 import GUI.Models.ModelsHandler;
-import GUI.Util.ConfirmOK;
+import GUI.Util.AlertOpener;
 import GUI.Util.ExceptionHandler;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,6 +41,9 @@ public class CategoriesController extends BaseController {
         tbvCat.setItems(getModelsHandler().getCategoryModel().getCategories());
 
         clmCat.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        setTbvCatChangeListener();
+        setTxtfieldNewCatChangeListener();
     }
 
     @FXML
@@ -60,7 +68,7 @@ public class CategoriesController extends BaseController {
     private void handleRemoveCat(ActionEvent actionEvent) {
         Category catToDelete = tbvCat.getSelectionModel().getSelectedItem();
 
-        if (catToDelete != null && ConfirmOK.confirm("Remove category?",
+        if (catToDelete != null && AlertOpener.confirm("Remove category?",
                         "Are you sure you want to remove " + catToDelete.getName() + "?")) {
             try {
                 getModelsHandler().getCategoryModel().deleteCategory(catToDelete);
@@ -76,5 +84,25 @@ public class CategoriesController extends BaseController {
     private void handleCancel(ActionEvent actionEvent) {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
         stage.close();
+    }
+
+    /**
+     * Disables/enables the remove category button
+     * if no category has been selected.
+     */
+    private void setTbvCatChangeListener() {
+        tbvCat.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            btnRemoveCat.setDisable(newValue == null);
+        });
+    }
+
+    /**
+     * Disables/enables the add category button
+     * if the new category text field is empty.
+     */
+    private void setTxtfieldNewCatChangeListener() {
+        txtfieldNewCat.textProperty().addListener((observable, oldValue, newValue) -> {
+            btnAddCat.setDisable(newValue.isEmpty());
+        });
     }
 }
