@@ -1,4 +1,4 @@
-package DAL.Util;
+package GUI.Util;
 
 public class LevenshteinCalculator {
     /**
@@ -7,7 +7,7 @@ public class LevenshteinCalculator {
      * @param target The target for the source to change into.
      * @return The Levenshtein Distance between the source and the target as an integer.
      */
-    private static int distance(String source, String target) {
+    public static int distance(String source, String target) {
         source = source.toLowerCase();
         target = target.toLowerCase();
 
