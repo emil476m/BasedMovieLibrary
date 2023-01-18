@@ -19,6 +19,10 @@ public class MovieModel {
     private IMovieManager movieManager;
     private ICatMovieManager catMovieManager;
     private List<CatMovie> catMovieList;
+    /*
+    * Contains an unmodified list of all movies.
+    * This is used to clear the search query of moveObservableList.
+    */
     private List<Movie> allMovies;
     private ObservableList<Movie> movieObservableList;
     private ObservableList<Movie> moviesToDelete;
@@ -78,44 +82,22 @@ public class MovieModel {
     public ObservableList<Movie> getMoviesToDeleteObservableList() { return moviesToDelete; }
 
     /**
-     * loops thru all movies in the observable list.
-     * @param id movie id.
-     * @return movie with the given id.
+     * Retrieves a movie with given id.
+     * @param id The id of the movie to retrieve.
+     * @return The movie with id, or null if not found.
      */
     public Movie getMovieFromID(int id){
         for (Movie m:movieObservableList) {
-            if (id == m.getId()){
-                return m;
-            }
+            if (id == m.getId()) return m;
         }
+
         return null;
     }
 
-
     /**
-     * searches through the movieObservableList to find movies that contain the search query and adds them to a different observableList
-     * @param query
-     * @return the list of movies that contain the query
+     * Searches for movies with given query.
+     * @param query The query to search for.
      */
-    /*public ObservableList<Movie> getSearchResults(String query)
-    {
-        ObservableList<Movie> searchResults = FXCollections.observableArrayList();
-
-        for (Movie m: movieObservableList)
-        {
-            boolean titleContains = m.getTitle().toLowerCase().contains(query);
-            boolean categoriesContains = !m.getCategories().isEmpty() && m.getCategoryNames().toLowerCase().contains(query);
-            boolean ratingContains = String.valueOf(m.getRating()).contains(query);
-            boolean pRatingContains = String.valueOf(m.getPRating()).contains(query);
-
-            boolean addMovie = titleContains || categoriesContains || ratingContains || pRatingContains;
-
-            if (addMovie) searchResults.add(m);
-        }
-
-        return searchResults;
-    }*/
-
     public void searchMovies (String query) {
         movieObservableList.clear();
 
@@ -132,15 +114,19 @@ public class MovieModel {
         }
     }
 
+    /**
+     * Clears the search query of movies.
+     */
     public void clearSearch() {
         movieObservableList.clear();
         movieObservableList.addAll(allMovies);
     }
 
     /**
-     * adds the new movie to the observable list and sends the new movie object down to the database.
-     * @param movie
-     * @throws Exception
+     * Instructs the movie manager to create a movie,
+     * and adds it to the list of movies.
+     * @param movie The movie to create.
+     * @throws Exception If it fails.
      */
     public void createMovie(Movie movie) throws Exception {
         if (movieExists(movie)) {
@@ -228,6 +214,11 @@ public class MovieModel {
         moviesToDelete.clear();
     }
 
+    /**
+     * Updates the last time a movie has been viewed.
+     * @param movie The movie to update.
+     * @throws Exception If it fails to update the movie.
+     */
     public void updateLastViewed(Movie movie) throws Exception {
         movieManager.updateLastViewed(movie);
     }

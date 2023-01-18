@@ -2,8 +2,6 @@ package GUI.Util;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.stage.StageStyle;
-
 import java.util.Optional;
 
 public class AlertOpener {
@@ -15,8 +13,6 @@ public class AlertOpener {
      */
     public static boolean confirm(String header, String content) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        //alert.getDialogPane().getStylesheets().removeAll();
-        //alert.getDialogPane().getStylesheets().add(MainController.currentStyle);
         alert.setTitle("Confirm Delete");
         alert.setHeaderText(header);
         alert.setContentText(content);

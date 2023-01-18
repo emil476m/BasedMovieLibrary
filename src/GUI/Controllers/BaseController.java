@@ -13,6 +13,11 @@ public abstract class BaseController {
         return modelsHandler;
     }
 
+    /**
+     * Checks if a given rating is valid.
+     * @param rating The rating to check.
+     * @return true if the rating is valid, otherwise false.
+     */
     public boolean isRatingInputValid(String rating) {
         try {
             double doubleRating = Double.parseDouble(rating);

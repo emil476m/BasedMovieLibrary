@@ -1,8 +1,3 @@
-import BE.Category;
-import BLL.CategoryManager;
-import BLL.Interfaces.ICategoryManager;
-import DAL.DB.CategoryDAO_DB;
-import DAL.Interfaces.ICategoryDAO;
 import GUI.Controllers.BaseController;
 import GUI.Controllers.DeleteMovieReminderController;
 import GUI.Models.ModelsHandler;
@@ -13,10 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.io.IOException;
-import java.util.List;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -40,12 +32,7 @@ public class Main extends Application {
         controller.setup();
 
         primaryStage.setTitle("Based Movie Collection");
-        //primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setScene(new Scene(root));
-
-
-        //Add fixed height and width here
-
 
         primaryStage.show();
     }
@@ -61,7 +48,7 @@ public class Main extends Application {
         try {
             root = loader.load();
         } catch (IOException e) {
-            ExceptionHandler.displayError(new Exception("Failed to open movie creator", e));
+            ExceptionHandler.displayError(new Exception("Failed to open", e));
         }
 
         Stage stage = new Stage();

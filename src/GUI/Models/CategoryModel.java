@@ -48,12 +48,16 @@ public class CategoryModel {
         categories.addAll(allCategories);
     }
 
+    /**
+     * Retrieves a category with a given id.
+     * @param id The id of the category to retrieve.
+     * @return The category or null if not found.
+     */
     public Category getCategoryFromID(int id){
         for (Category category: categories){
-            if (id == category.getId()){
-                return category;
-            }
+            if (id == category.getId()) return category;
         }
+
         return null;
     }
 
