@@ -163,7 +163,7 @@ public class MovieModel {
      * @return true if the movie already exists, otherwise false.
      */
     private boolean movieExists(Movie movie) {
-        int minChanges = 5;
+        int minChanges = 3;
 
         for (Movie m : allMovies) {
             int levDistance = LevenshteinCalculator.distance(movie.getTitle(), m.getTitle());
