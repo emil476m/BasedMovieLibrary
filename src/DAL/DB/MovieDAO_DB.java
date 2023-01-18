@@ -1,9 +1,6 @@
 package DAL.DB;
 
-import BE.CatMovie;
-import BE.Category;
 import BE.Movie;
-import DAL.Interfaces.ICatMovieDAO;
 import DAL.Interfaces.IMovieDAO;
 import DAL.Util.LocalFileHandler;
 
@@ -13,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDAO_DB implements IMovieDAO {
-
     private DatabaseConnector databaseConnector;
 
     public MovieDAO_DB(){
@@ -36,7 +32,7 @@ public class MovieDAO_DB implements IMovieDAO {
 
             // Loop through rows from database result set
             while(rs.next()){
-                //map database row to object
+                // Map database row to object
                 int movieId = rs.getInt("Id");
                 double movieRating = rs.getDouble("Rating");
                 double moviePRating = rs.getDouble("PersonalRating");
@@ -57,34 +53,33 @@ public class MovieDAO_DB implements IMovieDAO {
     }
 
     /**
-     * Inserts a newly created movie into the database and returns the movies' id.
-     * @param movie the created movie.
-     * @return movie with id.
-     * @throws Exception if it fails to create a movie.
+     * Inserts a newly created movie into the database and returns the movie with its new id.
+     * @param movie The movie to create.
+     * @return The created movie with its new id.
+     * @throws Exception if it fails to create the movie.
      */
     @Override
     public Movie createMovie(Movie movie) throws Exception {
-
-        String sql = "INSERT INTO Movie (MovieName, Rating, MoviePath) VALUES (?,?,?) ;";
+        String sql = "INSERT INTO Movie (MovieName, Rating, MoviePath) VALUES (?,?,?);";
 
         try(Connection connection = databaseConnector.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
-
             Path relativePath = LocalFileHandler.createLocalFile(movie.getFilePath());
 
             String title = movie.getTitle();
             double rating = movie.getRating();
             String path = String.valueOf(relativePath);
 
-
             statement.setString(1, title);
             statement.setDouble(2, rating);
             statement.setString(3, path);
 
             statement.executeUpdate();
+
             Movie generatedMovie = null;
 
             ResultSet resultSet = statement.getGeneratedKeys();
+
             if (resultSet.next()) {
                 int id = resultSet.getInt(1);
                 generatedMovie = new Movie(id, rating, movie.getCategories(), path, title);
@@ -105,7 +100,7 @@ public class MovieDAO_DB implements IMovieDAO {
      */
     @Override
     public void deleteMovie(Movie movie) throws Exception {
-        String sql = "DELETE FROM Movie WHERE Id = ?";
+        String sql = "DELETE FROM Movie WHERE Id = ?;";
 
         try (Connection connection = databaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -122,32 +117,32 @@ public class MovieDAO_DB implements IMovieDAO {
     }
 
     /**
-     * It edits the personal rating of the movies in the database, that matches the id of the Movie object.
-     * @param movie last selected movie.
-     * @throws Exception if it fails to edit the database.
+     * Edits the personal rating of a movie.
+     * @param movie The movie with its new personal rating.
+     * @throws Exception if it fails to edit the personal rating.
      */
     @Override
     public void editPRating(Movie movie) throws Exception {
         String sql = "UPDATE Movie SET PersonalRating = ? WHERE Id = ?;";
+
         try (Connection connection = databaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setDouble(1, movie.getPRating());
             statement.setInt(2, movie.getId());
 
-            //Run the specified SQL Statement
             statement.executeUpdate();
         }
         catch (SQLException e) {
             e.printStackTrace();
-            throw new Exception("Failed to update Personal Rating", e);
+            throw new Exception("Failed to update personal rating", e);
         }
     }
 
     /**
-     * gets an ArrayList of movies that have not been opened in more than 17520 hours and has a personal rating under 6
-     * @return an Arraylist of movie objects
-     * @throws Exception
+     * Returns a list of movie objects from the database that have not been opened in more than 17520 hours.
+     * @return A list of movies that have not been opened in more than 17520 hours
+     * @throws Exception If it fails to retrieve the movies.
      */
     public List<Movie> getAllOldMovies() throws Exception {
         ArrayList<Movie> allOldMovies = new ArrayList<>();
@@ -184,19 +179,17 @@ public class MovieDAO_DB implements IMovieDAO {
     }
 
     /**
-     * deletes a list of movie objects from the database
-     * @param deleteAllOldMovies a list of movie objects to delete
-     * @throws Exception
+     * Deletes all given movies.
+     * @param movies The movies to delete.
+     * @throws Exception If it fails to delete the movies.
      */
     @Override
-    public void deleteAllOldMovies(List<Movie> deleteAllOldMovies) throws Exception {
+    public void deleteMovies(List<Movie> movies) throws Exception {
         String sql = "DELETE FROM Movie WHERE id= ?";
 
         try(Connection connection = databaseConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql))
-        {
-            for (Movie m: deleteAllOldMovies)
-            {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (Movie m: movies) {
                 statement.setInt(1,m.getId());
 
                 statement.executeUpdate();
@@ -204,31 +197,28 @@ public class MovieDAO_DB implements IMovieDAO {
                 LocalFileHandler.deleteLocalFile(m.getFilePath());
             }
         }
-        catch (SQLException ex)
-        {
+        catch (SQLException ex) {
             ex.printStackTrace();
             throw new Exception("Failed to delete all old movies", ex);
         }
     }
 
     /**
-     * updates the lastView colum in the movie table of the database
-     * @param movie a movie object that the user has selected in the gui
-     * @throws Exception
+     * Updates the last time a movie has been viewed.
+     * @param movie The movie to update.
+     * @throws Exception If it fails to update the movie.
      */
     @Override
     public void updateLastViewed(Movie movie) throws Exception {
         String sql = "UPDATE Movie SET LastView = GETDATE() WHERE Id = ?;";
 
         try(Connection connection = databaseConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql))
-        {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, movie.getId());
 
             statement.executeUpdate();
         }
-        catch(SQLException e)
-        {
+        catch(SQLException e) {
             e.printStackTrace();
             throw new Exception("Could not update lastView");
         }

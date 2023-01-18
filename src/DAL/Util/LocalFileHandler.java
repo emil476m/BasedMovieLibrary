@@ -1,7 +1,6 @@
 package DAL.Util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -24,6 +23,7 @@ public class LocalFileHandler {
         catch (IOException e) {
             e.printStackTrace();
 
+            // No need to throw an exception if the file doesn't exist.
             if (!(e instanceof NoSuchFileException)) {
                 throw new Exception("Failed to delete local file", e);
             }
@@ -31,9 +31,10 @@ public class LocalFileHandler {
     }
 
     /**
-     * gets the local path for the file, then creates a new file in the data package and copies the original over in the new file
+     * Gets the local path for the file,
+     * then creates a new file in the data package and copies the original over in the new file.
      * @param path The path of the file to create.
-     * @return new path for the song
+     * @return The new path for the file.
      * @throws Exception If it fails to create the local file.
      */
     public static Path createLocalFile(String path) throws Exception {
@@ -44,7 +45,7 @@ public class LocalFileHandler {
             String relativeFilePath = "data//";
 
             Path originalFile = Paths.get(path);
-            File file = new File(relativeFilePath+=fileName);
+            File file = new File(relativeFilePath + fileName);
             Path finalFile = Paths.get(file.getPath());
             Files.copy(originalFile, finalFile, REPLACE_EXISTING);
             return finalFile;
@@ -52,7 +53,7 @@ public class LocalFileHandler {
         }
         catch (Exception e) {
             e.printStackTrace();
-            throw new Exception("Failed to create movie", e);
+            throw new Exception("Failed to create file", e);
         }
     }
 }

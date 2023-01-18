@@ -4,9 +4,6 @@ import BE.CatMovie;
 import BE.Category;
 import BE.Movie;
 import DAL.Interfaces.ICatMovieDAO;
-import DAL.Util.LocalFileHandler;
-
-import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,6 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
     public CatMovieDAO_DB(){
         databaseConnector = new DatabaseConnector();
     }
-
 
     /**
      * Return a list of CatMovie objects from the database.
@@ -47,49 +43,51 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
             return allCatMovies;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new Exception("Failed to retrieve catMovies", e);
+            /*
+            Implicit coupling? We're doing this because we don't
+            think there are any scenarios where this method would be called,
+            without the user trying to retrieve a movie.
+            */
+            throw new Exception("Failed to retrieve categories of movie", e);
         }
     }
 
     /**
-     * Inserts a newly created movie relations into the database.
+     * Creates a movie's category relations.
      * @param movie the created movie.
-     * @throws Exception if it fails to create a movie.
+     * @throws Exception if it fails to create the movie's relations.
      */
-    public void createMovies(Movie movie) throws Exception{
-        String sql = "INSERT INTO CatMovie (CategoryId, MovieId) VALUES (?,?) ;";
-        String sqlTest = "";
-        for (Category category: movie.getCategories()){
-            sqlTest += "INSERT INTO CatMovie VALUES(" + category.getId() +", " + movie.getId() + ");";
-        }
+    public void createMovieRelations(Movie movie) throws Exception{
+        String sql = "INSERT INTO CatMovie (CategoryId, MovieId) VALUES (?,?);";
+
         try(Connection connection = databaseConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sqlTest)){
+            PreparedStatement statement = connection.prepareStatement(sql)){
 
+            for (Category category : movie.getCategories()) {
+                statement.setInt(1, category.getId());
+                statement.setInt(2, movie.getId());
 
-
-            //String title = movie.getTitle();
-            //int movieId = movie.getId();;
-
-
-            //statement.setString(1, title);
-            //statement.setDouble(2, movieId);
-
-            statement.executeUpdate();
-
+                statement.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            /*
+            Implicit coupling? We're doing this because we don't
+            think there are any scenarios where this method would be called,
+            without the user trying to create a movie.
+            */
             throw new Exception("Failed to create movie", e);
         }
     }
 
     /**
-     * Deletes the relations between a category and its movies.
+     * Deletes all the relations of a category.
      * @param category The category to delete the relations of.
      * @throws Exception If it fails to delete the relations.
      */
     @Override
     public void deleteWhereCat(Category category) throws Exception {
-        String sql = "DELETE FROM CatMovie WHERE CategoryId = ?";
+        String sql = "DELETE FROM CatMovie WHERE CategoryId = ?;";
 
         try (Connection connection = databaseConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -108,9 +106,14 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
         }
     }
 
+    /**
+     * Deletes all the relations of a movie.
+     * @param movie The movie to delete the relations of.
+     * @throws Exception If it fails to delete the relations.
+     */
     @Override
     public void deleteWhereMovie(Movie movie) throws Exception {
-        String sql = "DELETE FROM CatMovie WHERE MovieId = ?";
+        String sql = "DELETE FROM CatMovie WHERE MovieId = ?;";
 
         try (Connection connection = databaseConnector.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -130,28 +133,30 @@ public class CatMovieDAO_DB implements ICatMovieDAO {
     }
 
     /**
-     * gets a list from the business logic layer of movies that should have their link deleted 
-     * @param deleteOldMovies a list of movie objects
-     * @throws Exception
+     * Deletes all the category relations of given movies.
+     * @param movies The movies to delete the relations of.
+     * @throws Exception If it fails to delete the relations.
      */
     @Override
-    public void deleteWhereOldMovies(List<Movie> deleteOldMovies) throws Exception {
+    public void deleteMoviesRelations(List<Movie> movies) throws Exception {
         String sql = "DELETE FROM CatMovie WHERE MovieId= ?";
 
         try(Connection connection = databaseConnector.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql))
-        {
-            for (Movie m: deleteOldMovies)
-            {
-                statement.setInt(1,m.getId());
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (Movie m: movies) {
+                statement.setInt(1, m.getId());
 
                 statement.executeUpdate();
             }
         }
-        catch (SQLException ex)
-        {
+        catch (SQLException ex) {
             ex.printStackTrace();
-            throw new Exception("Failed to delete all old movies", ex);
+            /*
+            Implicit coupling? We're doing this because we don't
+            think there are any scenarios where this method would be called,
+            without the user trying to delete a list of movies.
+            */
+            throw new Exception("Failed to delete movies", ex);
         }
     }
 }

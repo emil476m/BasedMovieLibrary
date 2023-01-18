@@ -2,7 +2,6 @@ package DAL.DB;
 
 import BE.Category;
 import DAL.Interfaces.ICategoryDAO;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +22,7 @@ public class CategoryDAO_DB implements ICategoryDAO {
      */
     @Override
     public Category addCategory(Category category) throws Exception {
-        String sql = "INSERT INTO Category (CategoryName) VALUES (?)";
-        Category newCategory = null;
+        String sql = "INSERT INTO Category (CategoryName) VALUES (?);";
 
         try (Connection connection = dbConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -34,9 +32,13 @@ public class CategoryDAO_DB implements ICategoryDAO {
 
             ResultSet resultSet = statement.getGeneratedKeys();
 
+            Category newCategory = null;
+
             if (resultSet.next()) {
-                newCategory = new Category(resultSet.getInt(1), category.getName());
+                int id = resultSet.getInt(1);
+                newCategory = new Category(id, category.getName());
             }
+
             return newCategory;
         }
         catch (SQLException e) {
@@ -52,17 +54,17 @@ public class CategoryDAO_DB implements ICategoryDAO {
      */
     @Override
     public List<Category> getAllCategories() throws Exception {
-        String sql = "SELECT * FROM Category";
+        String sql = "SELECT * FROM Category;";
 
         try (Connection connection = dbConnector.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = statement.executeQuery();
             List<Category> categories = new ArrayList<>();
+
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 int id = resultSet.getInt("Id");
                 String categoryName = resultSet.getString("CategoryName");
-
 
                 categories.add(new Category(id, categoryName));
             }
@@ -82,7 +84,7 @@ public class CategoryDAO_DB implements ICategoryDAO {
      */
     @Override
     public void deleteCategory(Category category) throws Exception {
-        String sql = "DELETE FROM Category WHERE Id = ?";
+        String sql = "DELETE FROM Category WHERE Id = ?;";
 
         try (Connection connection = dbConnector.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {

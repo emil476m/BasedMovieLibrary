@@ -5,7 +5,6 @@ import BLL.Interfaces.IMovieManager;
 import DAL.DB.MovieDAO_DB;
 import DAL.Interfaces.IMovieDAO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieManager implements IMovieManager {
@@ -31,7 +30,7 @@ public class MovieManager implements IMovieManager {
      */
     @Override
     public void deleteAllMovies(List<Movie> deleteAllMovies) throws Exception {
-        movieDAO.deleteAllOldMovies(deleteAllMovies);
+        movieDAO.deleteMovies(deleteAllMovies);
     }
 
     /**

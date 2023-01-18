@@ -72,12 +72,16 @@ private Date lastViewed;
     public String getCategoryNames(){
         if (!categories.isEmpty()) {
             String allCatNames = "";
+
             for (int i = 0; i < categories.size() - 1; i++) {
                 allCatNames += categories.get(i).getName() + ", ";
             }
+
             allCatNames += categories.get(categories.size() - 1);
+
             return allCatNames;
         }
+
         return null;
     }
 
@@ -89,17 +93,5 @@ private Date lastViewed;
 
     public String getFilePath() {
         return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public Date getLastViewed() {
-        return lastViewed;
-    }
-
-    public void setLastViewed(Date lastViewed) {
-        this.lastViewed = lastViewed;
     }
 }

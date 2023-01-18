@@ -6,11 +6,7 @@ import javafx.stage.StageStyle;
 
 public class ExceptionHandler {
     /**
-     * Handles thrown exceptions by displaying the error in an Alert window.
-     * @param t - Exception thrown
-     */
-    /**
-     * Displays an error as a modal to the user.
+     * Displays an error as an AlertBox to the user.
      * @param throwable The error to display.
      */
     public static void displayError(Throwable throwable) {

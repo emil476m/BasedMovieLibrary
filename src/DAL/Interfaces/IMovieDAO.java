@@ -1,8 +1,6 @@
 package DAL.Interfaces;
 
 import BE.Movie;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public interface IMovieDAO {
@@ -13,42 +11,46 @@ public interface IMovieDAO {
      */
     List<Movie> getAllMovies() throws Exception;
 
-
     /**
-     * Inserts a newly created movie into the database and returns the movies' id.
-     * @param movie the created movie.
-     * @return movie with id.
-     * @throws Exception if it fails to create a movie.
+     * Inserts a newly created movie into the database and returns the movie with its new id.
+     * @param movie The movie to create.
+     * @return The created movie with its new id.
+     * @throws Exception if it fails to create the movie.
      */
     Movie createMovie(Movie movie) throws Exception;
 
+    /**
+     * Deletes a movie from the database.
+     * @param movie The movie to delete.
+     * @throws Exception If it fails to delete the movie.
+     */
     void deleteMovie(Movie movie) throws Exception;
 
     /**
-     * It edits the personal rating of the movies in the database, that matches the id of the Movie object.
-     * @param movie last selected movie.
-     * @throws Exception if it fails to edit the database.
+     * Edits the personal rating of a movie.
+     * @param movie The movie with its new personal rating.
+     * @throws Exception if it fails to edit the personal rating.
      */
     void editPRating(Movie movie) throws Exception;
 
     /**
-     * returns a list of movie objects from the database that have not been opened in more than 17520 hours
-     * @return a list of movies that have not been opened in more than 17520 hours
-     * @throws Exception
+     * Returns a list of movie objects from the database that have not been opened in more than 17520 hours.
+     * @return A list of movies that have not been opened in more than 17520 hours
+     * @throws Exception If it fails to retrieve the movies.
      */
     List<Movie> getAllOldMovies() throws Exception;
 
     /**
-     * gets a list from the business logic layer of movies that should be deleted
-     * @param deleteAllOldMovies a list of movie objects to delete
-     * @throws Exception
+     * Deletes all given movies.
+     * @param movies The movies to delete.
+     * @throws Exception If it fails to delete the movies.
      */
-    void deleteAllOldMovies(List<Movie> deleteAllOldMovies) throws Exception;
+    void deleteMovies(List<Movie> movies) throws Exception;
 
     /**
-     * gets a boolean value and movie object so the database knows to update when the movie was last viewed
-     * @param movie a movie object that the user has selected in the gui
-     * @throws Exception
+     * Updates the last time a movie has been viewed.
+     * @param movie The movie to update.
+     * @throws Exception If it fails to update the movie.
      */
     void updateLastViewed(Movie movie) throws Exception;
 }

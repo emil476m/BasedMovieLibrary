@@ -7,8 +7,7 @@ import java.sql.Connection;
 public class DatabaseConnector {
     private SQLServerDataSource dataSource;
 
-    public DatabaseConnector()
-    {
+    public DatabaseConnector() {
         dataSource = new SQLServerDataSource();
         dataSource.setServerName("10.176.111.31");
         dataSource.setDatabaseName("BasedMovieLibrary");
