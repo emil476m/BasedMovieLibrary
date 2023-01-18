@@ -219,9 +219,9 @@ public class MovieModel {
      * @throws Exception If it fails to delete the movies.
      */
     public void deleteAllMoviesToDelete() throws Exception {
-        movieManager.deleteAllMovies(moviesToDelete);
+        movieManager.deleteMovies(moviesToDelete);
 
-        catMovieManager.deleteWhereOldMoives(moviesToDelete);
+        catMovieManager.deleteMoviesRelations(moviesToDelete);
 
         movieObservableList.removeAll(moviesToDelete);
         allMovies.removeAll(moviesToDelete);
