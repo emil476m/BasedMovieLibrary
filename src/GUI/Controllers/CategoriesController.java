@@ -65,8 +65,12 @@ public class CategoriesController extends BaseController {
         if (catToDelete != null && AlertOpener.confirm("Remove category?",
                         "Are you sure you want to remove " + catToDelete.getName() + "?")) {
             try {
+                //getModelsHandler().getMovieModel().updateMovieCats(catToDelete);
+
                 getModelsHandler().getCategoryModel().deleteCategory(catToDelete);
                 getModelsHandler().getMovieModel().updateMovieCats(catToDelete);
+
+                getModelsHandler().getCategoryModel().getCategories().remove(catToDelete);
             }
             catch (Exception e) {
                 ExceptionHandler.displayError(e);

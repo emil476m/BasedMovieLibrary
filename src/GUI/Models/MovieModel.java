@@ -46,18 +46,33 @@ public class MovieModel {
     public void updateMovieCats(Category category) {
         allMovies.replaceAll(movie -> {
             List<Category> catsToRemove = new ArrayList<>();
+            System.out.println(category.getName() + "");
 
             for (Category cat : movie.getCategories()) {
                 if (cat.getId() == category.getId()) catsToRemove.add(cat);
             }
 
             for (Category cat : catsToRemove) {
+                System.out.println("test 1");
                 movie.removeCategory(cat);
+                System.out.println("found cat " + category.getName() + " in the movie " + movie.getTitle());
             }
 
             return movie;
         });
 
+        movieObservableList.clear();
+        movieObservableList.addAll(allMovies);
+    }
+
+    public void updateMovieCatsTest(Category category) throws Exception {
+        for (Movie movie: allMovies){
+           if (movie.getCategories().contains(category)){
+               System.out.println("found cat " + category.getName() + " in the movie " + movie.getTitle());
+               movie.removeCategory(category);
+               System.out.println("you removed cat " + category.getName() + " from " + movie.getTitle());
+           }
+        }
         movieObservableList.clear();
         movieObservableList.addAll(allMovies);
     }

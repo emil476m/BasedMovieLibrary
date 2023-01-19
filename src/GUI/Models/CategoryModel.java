@@ -72,6 +72,6 @@ public class CategoryModel {
         // Deletes the relations of the category
         catMovieManager.deleteWhereCat(category);
 
-        categories.remove(category);
+        //categories.remove(category);
     }
 }
