@@ -13,17 +13,19 @@ private String filePath;
 private String title;
 private Date lastViewed;
 
-    public Movie(int id, double rating, List<Category> categories, String filePath, String title) {
+    public Movie(int id, double rating, List<Category> categoryList, String filePath, String title) {
         this.id = id;
         this.rating = rating;
-        this.categories = categories;
+        categories = new ArrayList<>();
+        categories.addAll(categoryList);
         this.filePath = filePath;
         this.title = title;
     }
 
-    public Movie(double rating, List<Category> categories, String filePath, String title) {
+    public Movie(double rating, List<Category> categoryList, String filePath, String title) {
         this.rating = rating;
-        this.categories = categories;
+        categories = new ArrayList<>();
+        categories.addAll(categoryList);
         this.filePath = filePath;
         this.title = title;
     }
@@ -33,9 +35,9 @@ private Date lastViewed;
         this.rating = rating;
         this.filePath = filePath;
         this.title = title;
-        categories = new ArrayList<>();
         this.pRating = pRating;
         this.lastViewed = lastViewed;
+        categories = new ArrayList<>();
     }
 
     public int getId() {
@@ -86,10 +88,12 @@ private Date lastViewed;
     }
 
     public void addCategory(Category category) {
-        this.categories.add(category);
+        categories.add(category);
     }
 
-    public void removeCategory(Category category) { this.categories.remove(category); }
+    public void removeCategory(Category category) {
+        categories.remove(category);
+    }
 
     public String getFilePath() {
         return filePath;

@@ -43,21 +43,12 @@ public class MovieModel {
      * Removes a category from all movies in the list.
      * @param category The category to remove.
      */
-    public void updateMovieCats(Category category) {
-        allMovies.replaceAll(movie -> {
-            List<Category> catsToRemove = new ArrayList<>();
-
-            for (Category cat : movie.getCategories()) {
-                if (cat.getId() == category.getId()) catsToRemove.add(cat);
+    public void updateMovieCats(Category category) throws Exception {
+        for (Movie movie: allMovies){
+            if (movie.getCategories().contains(category)){
+                movie.removeCategory(category);
             }
-
-            for (Category cat : catsToRemove) {
-                movie.removeCategory(cat);
-            }
-
-            return movie;
-        });
-
+        }
         movieObservableList.clear();
         movieObservableList.addAll(allMovies);
     }

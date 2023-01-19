@@ -47,6 +47,7 @@ public class CategoriesController extends BaseController {
 
             try {
                 getModelsHandler().getCategoryModel().addCategory(category);
+                txtfieldNewCat.clear();
             }
             catch (Exception e) {
                 ExceptionHandler.displayError(e);
@@ -65,8 +66,8 @@ public class CategoriesController extends BaseController {
         if (catToDelete != null && AlertOpener.confirm("Remove category?",
                         "Are you sure you want to remove " + catToDelete.getName() + "?")) {
             try {
-                getModelsHandler().getCategoryModel().deleteCategory(catToDelete);
                 getModelsHandler().getMovieModel().updateMovieCats(catToDelete);
+                getModelsHandler().getCategoryModel().deleteCategory(catToDelete);
             }
             catch (Exception e) {
                 ExceptionHandler.displayError(e);
