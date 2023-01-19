@@ -10,7 +10,7 @@ import DAL.Interfaces.ICatMovieDAO;
 import java.util.List;
 
 public class CatMovieManager implements ICatMovieManager {
-    ICatMovieDAO catMovieDAO;
+    private ICatMovieDAO catMovieDAO;
 
     public CatMovieManager(){
         catMovieDAO = new CatMovieDAO_DB();
@@ -19,16 +19,16 @@ public class CatMovieManager implements ICatMovieManager {
     /**
      * Return a list of CatMovie objects from the database.
      * @return A list of all CatMovies.
-     * @throws Exception throws exception if it fails to return a list of CatMovie objects.
+     * @throws Exception If it fails to return a list of CatMovie objects.
      */
     public List<CatMovie> getAllCatMovies() throws Exception{
         return catMovieDAO.getAllCatMovies();
     }
 
     /**
-     * Inserts a newly created movie relations into the database.
-     * @param movie the created movie.
-     * @throws Exception if it fails to create a movie.
+     * Creates a movie's category relations.
+     * @param movie The movie to create the relations of.
+     * @throws Exception if it fails to create the relations.
      */
     public void createMovies(Movie movie) throws Exception{
         catMovieDAO.createMovieRelations(movie);
@@ -57,12 +57,12 @@ public class CatMovieManager implements ICatMovieManager {
     }
 
     /**
-     * sends an ArrayList to the database to delete the category link the movies in the list has
-     * @param deleteOldMovies an ArrayList of movie objects
-     * @throws Exception
+     * Instructs the movie DAO to delete the relations of a list of movies.
+     * @param movies The movies to delete the relations of.
+     * @throws Exception If it fails to delete the relations.
      */
     @Override
-    public void deleteWhereOldMoives(List<Movie> deleteOldMovies) throws Exception {
-        catMovieDAO.deleteMoviesRelations(deleteOldMovies);
+    public void deleteMoviesRelations(List<Movie> movies) throws Exception {
+        catMovieDAO.deleteMoviesRelations(movies);
     }
 }

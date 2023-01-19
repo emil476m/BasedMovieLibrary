@@ -4,7 +4,6 @@ import BE.Movie;
 import GUI.Util.AlertOpener;
 import GUI.Util.ExceptionHandler;
 import GUI.Util.ModalOpener;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,9 +19,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import javafx.stage.StageStyle;
-import javafx.util.StringConverter;
 
 import java.awt.*;
 import java.io.File;
@@ -30,10 +26,10 @@ import java.io.IOException;
 
 import java.net.URI;
 import java.util.*;
-import java.util.List;
 
 public class MainController extends BaseController {
-    public Button btnIMDB;
+    @FXML
+    private Button btnIMDB;
     @FXML
     private Button btnEditPRating;
     @FXML
@@ -63,12 +59,12 @@ public class MainController extends BaseController {
     private File directory;
 
     /**
-     * opens the view where we can add a movie.
+     * Opens the view where we can add a movie.
      * @param actionEvent
      */
     @FXML
     private void handleAddMovie(ActionEvent actionEvent) {
-        //Load the new stage & view
+        // Load the new stage & view
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/Views/CreateMovieView.fxml"));
         Parent root = null;
 
@@ -88,6 +84,11 @@ public class MainController extends BaseController {
         controller.setModel(getModelsHandler());
         controller.setup();
     }
+
+    /**
+     * Opens the view for managing categories.
+     * @param actionEvent
+     */
     @FXML
     private void handleOpenCategories(ActionEvent actionEvent) {
         ModalOpener.openModal(getClass().getResource("/GUI/Views/CategoriesView.fxml"),
@@ -115,14 +116,17 @@ public class MainController extends BaseController {
         }
     }
 
+    /**
+     * Searches for a movie with a given query.
+     * @param search The search query.
+     */
     private void search(String search) {
         String query = search.toLowerCase();
-        //tbvMovies.setItems(getModelsHandler().getMovieModel().getSearchResults(query));
         getModelsHandler().getMovieModel().searchMovies(query);
     }
 
     /**
-     * searches for movies when the search button is pressed and if there has been made a search it clears it if you press the same button
+     * Searches for a movie, when the search button is clicked.
      * @param actionEvent
      */
     @FXML
@@ -132,6 +136,10 @@ public class MainController extends BaseController {
         if(search != null) search(search);
     }
 
+    /**
+     * Clears the search query.
+     * @param actionEvent
+     */
     @FXML
     private void onClearSearch(ActionEvent actionEvent) {
         if (txtfieldSearch.getText() != null) {
@@ -141,7 +149,7 @@ public class MainController extends BaseController {
     }
 
     /**
-     * searches for movies with a given parameter if the user presses the enter key
+     * Searches for movies with a given parameter if the user presses the enter key
      * @param keyEvent
      */
     @FXML
@@ -158,7 +166,7 @@ public class MainController extends BaseController {
     }
 
     /**
-     * shows the movies in the view.
+     * Shows the movies in the view.
      */
     private void initializeMovies(){
         tbvMovies.setItems(getModelsHandler().getMovieModel().getMovieObservableList());
@@ -209,7 +217,7 @@ public class MainController extends BaseController {
     }
 
     /**
-     * closes the program, when you press the close button.
+     * Closes the program, when you press the close button.
      * @param actionEvent
      */
     @FXML
@@ -219,7 +227,7 @@ public class MainController extends BaseController {
     }
 
     /**
-     * opens the standard browser of the computer on a IMDB search for the selected movie
+     * Opens the standard browser of the computer on a IMDB search for the selected movie
      * @param actionEvent
      */
     public void handleShowIMDB(ActionEvent actionEvent) {
@@ -229,6 +237,7 @@ public class MainController extends BaseController {
             Desktop desktop = Desktop.getDesktop();
             String link = "http://www.imdb.com/find?s=tt&q=";
             String title = selectedMovie.getTitle().replace(" ", "");
+
             if(desktop.isSupported(Desktop.Action.BROWSE))
             {
                 try
@@ -260,7 +269,7 @@ public class MainController extends BaseController {
     }
 
     /**
-     * plays the selected movie on a double click
+     * Plays the selected movie on a double click
      * @param mouseEvent
      */
     @FXML
@@ -273,14 +282,16 @@ public class MainController extends BaseController {
     }
 
     /**
-     * opens the standard mediaPlayer on the user's computer
+     * Opens the standard mediaPlayer on the user's computer
      */
     private void openMediaPlayer()
     {
-        selectedMovie = (Movie) tbvMovies.getSelectionModel().getSelectedItem();
+        selectedMovie = tbvMovies.getSelectionModel().getSelectedItem();
+
         if (selectedMovie != null) {
             directory = new File(selectedMovie.getFilePath());
             Desktop desktop = Desktop.getDesktop();
+
             if (desktop.isSupported(Desktop.Action.OPEN)) {
                 try {
                     desktop.open(directory.getAbsoluteFile());

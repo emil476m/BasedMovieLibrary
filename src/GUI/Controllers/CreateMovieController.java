@@ -11,18 +11,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.List;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 public class CreateMovieController extends BaseController {
     @FXML
@@ -53,6 +47,9 @@ public class CreateMovieController extends BaseController {
         stage.close();
     }
 
+    /**
+     * Disables the create button if an input is missing.
+     */
     private final ChangeListener<String> fieldChangeListener = new ChangeListener<>() {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -61,7 +58,7 @@ public class CreateMovieController extends BaseController {
     };
 
     /**
-     * helps the user get the filepath for their movie.
+     * Opens the file explorer for the user to select a movie.
      * @param actionEvent
      */
     @FXML
@@ -83,7 +80,7 @@ public class CreateMovieController extends BaseController {
     }
 
     /**
-     * creates a movie object when clicked and sends it down.
+     * Creates a new movie with the given inputs.
      */
     @FXML
     private void handleCreateMovie() {
@@ -93,7 +90,7 @@ public class CreateMovieController extends BaseController {
 
         String title = txtfieldTitle.getText();
         String[] splitRating = txtfieldIMDBRating.getText().split("\\.");
-        Double rating = Double.parseDouble(splitRating.length > 1 ? splitRating[0] + "." + splitRating[1].charAt(0) : splitRating[0]);
+        double rating = Double.parseDouble(splitRating.length > 1 ? splitRating[0] + "." + splitRating[1].charAt(0) : splitRating[0]);
         String path = txtfieldFilepath.getText();
         List<Category> categoryList = tbvAllCatsForMovie.getSelectionModel().getSelectedItems();
 
@@ -109,7 +106,7 @@ public class CreateMovieController extends BaseController {
     }
 
     /**
-     * initializes the class.
+     * Initializes the class.
      */
     @Override
     public void setup() {
@@ -121,7 +118,7 @@ public class CreateMovieController extends BaseController {
     }
 
     /**
-     * shows categories, enables multiselect and disables buttons on startup.
+     * Shows categories, enables multiselect and disables buttons on startup.
      */
     private void setupCreateMovie(){
         btnCreateMovie.setDisable(true);
@@ -146,32 +143,32 @@ public class CreateMovieController extends BaseController {
     }
 
     /**
-     * checks if title is empty or null.
-     * @return boolean
+     * Checks if title is empty or null.
+     * @return true if the title is empty or null, otherwise false.
      */
     private boolean isTitleEmpty() {
         return txtfieldTitle.getText() == null || txtfieldTitle.getText().trim().isEmpty();
     }
 
     /**
-     * checks if filepath is empty og null.
-     * @return boolean
+     * Checks if filepath is empty og null.
+     * @return true if the filepath is empty or null, otherse false.
      */
     private boolean isFileEmpty() {
         return txtfieldFilepath.getText() == null || txtfieldFilepath.getText().trim().isEmpty();
     }
 
     /**
-     * checks if rating is empty or null.
-     * @return boolean
+     * Checks if rating is empty or null.
+     * @return true if rating is null or empty, otherwise false.
      */
     private boolean isRatingEmpty() {
         return txtfieldIMDBRating.getText() == null || txtfieldIMDBRating.getText().trim().isEmpty();
     }
 
     /**
-     * checks if there are the necessary inputs to create a movie.
-     * @return true or false
+     * Checks if there are the necessary inputs to create a movie.
+     * @return true if all fields are filled out, otherwise false.
      */
     private boolean isInputMissing() {
         if (isFileEmpty()) {
@@ -193,37 +190,38 @@ public class CreateMovieController extends BaseController {
             AlertOpener.validationError("Title can not be empty");
             return true;
         }
+
         return false;
     }
 
     /**
-     * makes the tableview able to multiselect without holding control, by using node instances and mouseevents.
+     * Makes the tableview able to multiselect without holding control,
+     * by using node instances and mouse events.
      */
     private void multiSelect(){
         tbvAllCatsForMovie.addEventFilter(MouseEvent.MOUSE_PRESSED, evt -> {
             Node node = evt.getPickResult().getIntersectedNode();
 
-            // go up from the target node until a row is found or it's clear the
-            // target node wasn't a node.
+            // Gets the row that was clicked.
             while (node != null && node != tbvAllCatsForMovie && !(node instanceof TableRow)) {
                 node = node.getParent();
             }
 
-            // if is part of a row or the row,
-            // handle event instead of using standard handling
+            // Don't use standard event, if node is a table row.
             if (node instanceof TableRow) {
-                // prevent further handling
+                // Prevent further handling
                 evt.consume();
 
                 TableRow row = (TableRow) node;
                 TableView tv = row.getTableView();
 
-                // focus the tableview
+                // Focus the tableview
                 tv.requestFocus();
 
                 if (!row.isEmpty()) {
-                    // handle selection for non-empty nodes
+                    // Handle selection for non-empty nodes
                     int index = row.getIndex();
+
                     if (row.isSelected()) {
                         tv.getSelectionModel().clearSelection(index);
                     } else {

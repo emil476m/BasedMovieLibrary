@@ -1,8 +1,6 @@
 package GUI.Util;
 
-import GUI.Controllers.MainController;
 import javafx.scene.control.Alert;
-import javafx.stage.StageStyle;
 
 public class ExceptionHandler {
     /**

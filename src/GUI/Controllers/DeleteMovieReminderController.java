@@ -41,12 +41,20 @@ public class DeleteMovieReminderController extends BaseController {
         setTbvDMoviesChangeListener();
     }
 
+    /**
+     * Closes this window.
+     * @param event
+     */
     @FXML
     private void handleClose(ActionEvent event) {
         Stage stage = (Stage) CloseBtn.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Tries to delete a movie.
+     * @param event
+     */
     @FXML
     private void DeleteMovie(ActionEvent event) {
         Movie selectedMovie = TbvDMovies.getSelectionModel().getSelectedItem();
@@ -65,6 +73,10 @@ public class DeleteMovieReminderController extends BaseController {
         }
     }
 
+    /**
+     * Tries to delete all suggested movies to delete.
+     * @param event
+     */
     public void DeleteAllMovies(ActionEvent event) {
         try
         {

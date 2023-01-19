@@ -8,7 +8,9 @@ import DAL.Interfaces.ICategoryDAO;
 import java.util.List;
 
 public class CategoryManager implements ICategoryManager {
-    ICategoryDAO categoryDAO = new CategoryDAO_DB();
+    private ICategoryDAO categoryDAO;
+
+    public CategoryManager() { categoryDAO = new CategoryDAO_DB(); }
 
     /**
      * Instructs the DAO to add a new category,
