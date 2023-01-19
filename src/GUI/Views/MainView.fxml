@@ -20,7 +20,7 @@
                 <TableColumn fx:id="clmTitle" prefWidth="406.0"  text="Title" />
                   <TableColumn fx:id="clmCategory" prefWidth="213.0"  text="Category" />
                   <TableColumn fx:id="clmIMDB" prefWidth="82.0"  text="IMDB" />
-                  <TableColumn fx:id="clmPRating" prefWidth="75.0"  text="P Rating" />
+                  <TableColumn fx:id="clmPRating" prefWidth="75.0"  text="My Rating" />
               </columns>
             </TableView>
          </children>
