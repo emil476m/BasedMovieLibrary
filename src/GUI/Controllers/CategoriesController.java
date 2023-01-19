@@ -68,7 +68,7 @@ public class CategoriesController extends BaseController {
                 //getModelsHandler().getMovieModel().updateMovieCats(catToDelete);
 
                 getModelsHandler().getCategoryModel().deleteCategory(catToDelete);
-                getModelsHandler().getMovieModel().updateMovieCats(catToDelete);
+                getModelsHandler().getMovieModel().updateMovieCatsTest(catToDelete);
 
                 getModelsHandler().getCategoryModel().getCategories().remove(catToDelete);
             }

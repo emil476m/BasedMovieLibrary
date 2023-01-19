@@ -16,6 +16,7 @@ private Date lastViewed;
     public Movie(int id, double rating, List<Category> categories, String filePath, String title) {
         this.id = id;
         this.rating = rating;
+        categories = new ArrayList<>();
         this.categories = categories;
         this.filePath = filePath;
         this.title = title;
@@ -89,7 +90,13 @@ private Date lastViewed;
         this.categories.add(category);
     }
 
-    public void removeCategory(Category category) { this.categories.remove(category); }
+    public void removeCategory(Category category) {
+        for (Category category1: categories){
+            if (category1.getId() == category.getId()){
+                categories.remove(categories.indexOf(category1));
+            }
+        }
+    }
 
     public String getFilePath() {
         return filePath;

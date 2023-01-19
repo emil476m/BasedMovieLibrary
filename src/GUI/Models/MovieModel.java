@@ -68,9 +68,7 @@ public class MovieModel {
     public void updateMovieCatsTest(Category category) throws Exception {
         for (Movie movie: allMovies){
            if (movie.getCategories().contains(category)){
-               System.out.println("found cat " + category.getName() + " in the movie " + movie.getTitle());
                movie.removeCategory(category);
-               System.out.println("you removed cat " + category.getName() + " from " + movie.getTitle());
            }
         }
         movieObservableList.clear();
