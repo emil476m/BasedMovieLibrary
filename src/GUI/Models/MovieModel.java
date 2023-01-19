@@ -44,7 +44,7 @@ public class MovieModel {
      * @param category The category to remove.
      */
     public void updateMovieCats(Category category) {
-        movieObservableList.replaceAll(movie -> {
+        allMovies.replaceAll(movie -> {
             List<Category> catsToRemove = new ArrayList<>();
 
             for (Category cat : movie.getCategories()) {
@@ -57,6 +57,9 @@ public class MovieModel {
 
             return movie;
         });
+
+        movieObservableList.clear();
+        movieObservableList.addAll(allMovies);
     }
 
     private void getAllMoviesToDelete() throws Exception {
